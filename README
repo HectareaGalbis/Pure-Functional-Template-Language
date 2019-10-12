@@ -1,1 +1,16 @@
+Ejemplos de uso:
 
+
+    solve<True,float,int>::value<0> variableFloat = 3.5;
+    - La variable es de tipo float y tiene el valor 3.5.
+    
+    solve<False,float,int>::value<0> variableInt = 3.5;
+    - La variable es de tipo int y tiene el valor 3.
+    
+    
+    
+    solve<Greater,Int<5>,Int<3>,int,float>::value<0> variable = 3.5;
+    - Greater se aplica a los dos siguientes parametros (Int<5>,Int<3>), y como 5>3 se retorna True,
+      transformándose la expresión anterior en 
+        solve<True,int,float>::value<0> variable = 3.5;
+      La cual hará que variable sea de tipo int, por lo que variable valdrá 3.
