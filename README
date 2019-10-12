@@ -13,4 +13,13 @@ Ejemplos de uso:
     - Greater se aplica a los dos siguientes parametros (Int<5>,Int<3>), y como 5>3 se retorna True,
       transformándose la expresión anterior en 
         solve<True,int,float>::value<0> variable = 3.5;
-      La cual hará que variable sea de tipo int, por lo que variable valdrá 3.
+      La cual hará que 'variable' sea de tipo int, por lo que variable valdrá 3.
+
+
+
+    using isEqual = solve<Equal, solve<Plus,Int<2>,Int<2>>::value<0>, solve<Mult,Int<2>,Int<2>>::value<0> >::value<0>;
+    solve<IfThenElse,isEqual,float,int>::value<0> variable = 3.5;
+    - Este es un ejemplo un poco más complejo. En la primera línea se guarda el resultado de comprobar si '2+2==2*2',
+      lo que nos devolvera 'True'. Por tanto, la expresión de la segunda línea se deduce a
+         solve<IfThenElse,True,float,int>::value<0> variable = 3.5;
+      de forma que variable pasará a ser de tipo float y valdrá 3.5.
