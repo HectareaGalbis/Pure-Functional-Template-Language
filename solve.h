@@ -20,13 +20,23 @@ struct getValue<k,T,Args...>{
 
 
 template<class... Args>
-struct solve{};
+struct solve{
+
+    static const int size = 0;
+
+};
 
 template<class T, class... Args>
 struct solve<T,Args...>{
 
     template<int k>
     using value = typename getValue<k,T,Args...>::value;
+
+    static const int size = 1+solve<Args...>::size;
+
+    using beta = T;
+    using head = T;
+    using tail = solve<Args...>;
 
 };
 

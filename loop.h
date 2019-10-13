@@ -12,6 +12,8 @@ struct solve<Loop,X,Args...>{
     template<int k>
     using value = typename solve<X,X,Args...>::template value<k>;
 
+    using beta = solve<X,X,Args...>;
+
 };
 
 
