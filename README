@@ -23,3 +23,19 @@ Ejemplos de uso:
       lo que nos devolvera 'True'. Por tanto, la expresión de la segunda línea se deduce a
          solve<IfThenElse,True,float,int>::value<0> variable = 3.5;
       de forma que variable pasará a ser de tipo float y valdrá 3.5.
+
+
+
+Ejemplo numeros primos:
+
+    template<int k>
+    const bool EsPrimo = solve<IsPrime,Int<k>>::template value<0>::value;
+
+    int main(){
+        const int p = 997;
+        if (EsPrimo<p>)
+            cout << "El numero " << p << " es primo!!! :D" << endl;
+        else
+            cout << "El numero " << p << " no es primo!!! :C" << endl;
+        return 0;
+    }
