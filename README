@@ -1,41 +1,13 @@
-Ejemplos de uso:
+Libreria básica para calculo funcional con Templates.
 
 
-    solve<True,float,int>::value<0> variableFloat = 3.5;
-    - La variable es de tipo float y tiene el valor 3.5.
-    
-    solve<False,float,int>::value<0> variableInt = 3.5;
-    - La variable es de tipo int y tiene el valor 3.
-    
-    
-    
-    solve<Greater,Int<5>,Int<3>,int,float>::value<0> variable = 3.5;
-    - Greater se aplica a los dos siguientes parametros (Int<5>,Int<3>), y como 5>3 se retorna True,
-      transformándose la expresión anterior en 
-        solve<True,int,float>::value<0> variable = 3.5;
-      La cual hará que 'variable' sea de tipo int, por lo que variable valdrá 3.
+1.
+#define NEED_FLOAT true
+Bool<NEED_FLOAT>::value<float,int> variable = 3.5;
 
 
+2.
+IsPrime::let<7>::let<int>::let<string> variable; //Variable de tipo int
+IsPrime::value<7>::value<int,string> variable; //Equivalente al anterior
+IsPrime::let<8>::let<int,string> variable; //Variable de tipo string
 
-    using isEqual = solve<Equal, solve<Plus,Int<2>,Int<2>>::value<0>, solve<Mult,Int<2>,Int<2>>::value<0> >::value<0>;
-    solve<IfThenElse,isEqual,float,int>::value<0> variable = 3.5;
-    - Este es un ejemplo un poco más complejo. En la primera línea se guarda el resultado de comprobar si '2+2==2*2',
-      lo que nos devolvera 'True'. Por tanto, la expresión de la segunda línea se deduce a
-         solve<IfThenElse,True,float,int>::value<0> variable = 3.5;
-      de forma que variable pasará a ser de tipo float y valdrá 3.5.
-
-
-
-Ejemplo numeros primos:
-
-    template<int k>
-    const bool EsPrimo = solve<IsPrime,Int<k>>::template value<0>::value;
-
-    int main(){
-        const int p = 997;
-        if (EsPrimo<p>)
-            cout << "El numero " << p << " es primo!!! :D" << endl;
-        else
-            cout << "El numero " << p << " no es primo!!! :C" << endl;
-        return 0;
-    }
