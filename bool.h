@@ -1,127 +1,83 @@
 #ifndef BOLEANCHURCH_H_INCLUDED
 #define BOLEANCHURCH_H_INCLUDED
 
-#include "solve.h"
+#include "curry.h"
+
 
 
 struct True{
 
-    static const bool value = true;
+    static const bool b_value = true;
+
+    template<class X, class Y>
+    using value = X;
+
+    template<class... Args>
+    using let = typename curry<True::value,2,Args...>::value;
 
 };
-
-
-template<class T, class F, class... Args>
-struct solve<True,T,F,Args...>{
-
-    template<int k>
-    using value = typename solve<T,Args...>::template value<k>;
-
-    using beta = solve<T,Args...>;
-
-};
-
-
-//----------------
-
 
 struct False{
 
-    static const bool value = false;
+    static const bool b_value = false;
+
+    template<class X, class Y>
+    using value = Y;
+
+    template<class... Args>
+    using let = typename curry<False::value,2,Args...>::value;
 
 };
-
-
-template<class T, class F, class... Args>
-struct solve<False,T,F,Args...>{
-
-    template<int k>
-    using value = typename solve<F,Args...>::template value<k>;
-
-    using beta = solve<F,Args...>;
-
-};
-
-
-//---------------
-
-
-struct Not{};
-
-
-template<class X, class... Args>
-struct solve<Not,X,Args...>{
-
-    template<int k>
-    using value = typename solve<X,False,True,Args...>::template value<k>;
-
-    using beta = typename solve<X,False,True,Args...>::beta;
-
-};
-
-
-//-------------------
-
-
-struct And{};
-
-
-template<class X, class Y, class... Args>
-struct solve<And,X,Y,Args...>{
-
-    template<int k>
-    using value = typename solve<X,Y,False,Args...>::template value<k>;
-
-    using beta = typename solve<X,Y,False,Args...>::beta;
-
-};
-
-
-//--------------------
-
-
-struct Or{};
-
-
-template<class X, class Y, class... Args>
-struct solve<Or,X,Y,Args...>{
-
-    template<int k>
-    using value = typename solve<X,True,Y,Args...>::template value<k>;
-
-    using beta = typename solve<X,True,Y,Args...>::beta;
-
-};
-
-
-//-----------------
-
 
 template<bool b>
-struct Bool{};
+struct Bool{
+    using value = True;
+};
 
+template<>
+struct Bool<false>{
+    using value = False;
+};
 
-template<class... Args>
-struct solve<Bool<true>,Args...>{
+struct Not{
 
-    template<int k>
-    using value = typename solve<True,Args...>::template value<k>;
+    template<class X>
+    using value = typename X::template let<False>::template let<True>;
 
-    using beta = solve<True,Args...>;
+    template<class... Args>
+    using let = typename curry<Not::value,1,Args...>::value;
 
 };
 
+struct And{
 
-template<class... Args>
-struct solve<Bool<false>,Args...>{
+    template<class X, class Y>
+    using value = typename X::template let<Y>::template let<False>;
 
-    template<int k>
-    using value = typename solve<False,Args...>::template value<k>;
-
-     using beta = solve<False,Args...>;
+    template<class... Args>
+    using let = typename curry<And::value,2,Args...>::value;
 
 };
 
+struct Or{
+
+    template<class X, class Y>
+    using value = typename X::template let<True>::template let<Y>;
+
+    template<class... Args>
+    using let = typename curry<Or::value,2,Args...>::value;
+
+};
+
+struct IfThenElse{
+
+    template<class P, class Q, class R>
+    using value = typename P::template let<Q>::template let<R>;
+
+    template<class... Args>
+    using let = typename curry<IfThenElse::value,3,Args...>::value;
+
+};
 
 
 

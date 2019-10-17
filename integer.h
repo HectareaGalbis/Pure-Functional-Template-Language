@@ -1,7 +1,32 @@
 #ifndef INTEGER_H_INCLUDED
 #define INTEGER_H_INCLUDED
 
-#include "solve.h"
+#include "curry.h"
+#include "tuple.h"
+
+template<int k>
+struct ChInt{
+
+    template<class F, class X>
+    using value = typename Rep<k>::template let<F>::template let<X>;;
+
+    template<class... Args>
+    using let = typename curry<ChInt<k>::value,2,Args...>::value;
+
+};
+
+struct ChSuc{
+
+    template<class N, class F, class X>
+    using value = typename N::template let<F>::template let<typename F::template let<X>>;
+
+    template<class... Args>
+    using let = typename curry<ChSuc::value,3,Args...>::value;
+
+};
+
+//------------------------
+
 
 template<int k>
 struct Int{
@@ -10,322 +35,159 @@ struct Int{
 
 };
 
+struct Plus{
 
-//-------------------
+    template<class N, class M>
+    using value = Int<N::value+M::value>;
 
-
-struct Church{};
-
-
-template<class N, class F, class A, class... Args>
-struct solve<Church,N,F,A,Args...>{
-
-    template<int k>
-    using value = typename solve<Church,Int<N::value-1>, F, typename solve<F,A>::template value<0>, Args...>::template value<k>;
-
-    using beta = solve<Church,Int<N::value-1>, F, typename solve<F,A>::template value<0>, Args...>;
+    template<class... Args>
+    using let = typename curry<Plus::value,2,Args...>::value;
 
 };
 
+struct Minus{
 
-template<class F, class A, class... Args>
-struct solve<Church,Int<0>,F,A,Args...>{
+    template<class N, class M>
+    using value = Int<N::value-M::value>;
 
-    template<int k>
-    using value = typename solve<A, Args...>::template value<k>;
-
-    using beta = solve<A, Args...>;
-
-};
-
-
-//------------------------
-
-
-struct Plus{};
-
-
-template<class X, class Y, class... Args>
-struct solve<Plus,X,Y,Args...>{
-
-    template<int k>
-    using value = typename solve<Int<X::value+Y::value>,Args...>::template value<k>;
-
-    using beta = solve< Int<X::value+Y::value>, Args...>;
+    template<class... Args>
+    using let = typename curry<Minus::value,2,Args...>::value;
 
 };
 
+struct Mult{
 
-//------------------------
+    template<class N, class M>
+    using value = Int<N::value*M::value>;
 
-
-struct Minus{};
-
-
-template<class X, class Y, class... Args>
-struct solve<Minus,X,Y,Args...>{
-
-    template<int k>
-    using value = typename solve<Int<X::value-Y::value>,Args...>::template value<k>;
-
-    using beta = solve< Int<X::value-Y::value>, Args...>;
+    template<class... Args>
+    using let = typename curry<Mult::value,2,Args...>::value;
 
 };
 
+struct Div{
 
-//------------------------
+    template<class N, class M>
+    using value = Int<N::value/M::value>;
 
-
-struct Mult{};
-
-
-template<class X, class Y, class... Args>
-struct solve<Mult,X,Y,Args...>{
-
-    template<int k>
-    using value = typename solve<Int<X::value*Y::value>,Args...>::template value<k>;
-
-    using beta = solve< Int<X::value*Y::value>, Args...>;
+    template<class... Args>
+    using let = typename curry<Div::value,2,Args...>::value;
 
 };
 
+struct Mod{
 
-//------------------------
+    template<class N, class M>
+    using value = Int<N::value%M::value>;
 
-
-struct Div{};
-
-
-template<class X, class Y, class... Args>
-struct solve<Div,X,Y,Args...>{
-
-    template<int k>
-    using value = typename solve<Int<X::value/Y::value>,Args...>::template value<k>;
-
-    using beta = solve< Int<X::value/Y::value>, Args...>;
+    template<class... Args>
+    using let = typename curry<Mod::value,2,Args...>::value;
 
 };
 
+struct Opp{
 
-//---------------------
+    template<class N>
+    using value = Int<-N::value>;
 
-
-struct Mod{};
-
-
-template<class X, class Y, class... Args>
-struct solve<Mod,X,Y,Args...>{
-
-    template<int k>
-    using value = typename solve<Int<X::value/Y::value>,Args...>::template value<k>;
-
-    using beta = solve< Int<X::value%Y::value>, Args...>;
+    template<class... Args>
+    using let = typename curry<Opp::value,1,Args...>::value;
 
 };
 
+struct Equal{
 
-//-----------------------
+    template<class N, class M>
+    using value = typename Bool<N::value==M::value>::value;
 
-
-struct Opp{};
-
-
-template<class X, class... Args>
-struct solve<Opp,X,Args...>{
-
-    template<int k>
-    using value = typename solve<Int<-X::value>,Args...>::template value<k>;
-
-    using beta = solve< Int<-X::value>, Args...>;
+    template<class... Args>
+    using let = typename curry<Equal::value,2,Args...>::value;
 
 };
 
+struct Greater{
 
-//--------------------------
+    template<class N, class M>
+    using value = typename Bool<(N::value>M::value)>::value;
 
-
-struct Equal{};
-
-
-template<class X, class Y, class... Args>
-struct solve<Equal,X,Y,Args...>{
-
-    template<int k>
-    using value = typename solve<Bool<X::value==Y::value>,Args...>::template value<k>;
-
-    using beta = solve< Bool<X::value==Y::value>, Args...>;
+    template<class... Args>
+    using let = typename curry<Greater::value,2,Args...>::value;
 
 };
 
+struct Less{
 
-//--------------------------
+    template<class N, class M>
+    using value = typename Bool<N::value<M::value>::value;
 
-
-struct Greater{};
-
-
-template<class X, class Y, class... Args>
-struct solve<Greater,X,Y,Args...>{
-
-    template<int k>
-    using value = typename solve<Bool<(X::value>Y::value)>,Args...>::template value<k>;
-
-    using beta = solve< Bool<(X::value>Y::value)>, Args...>;
+    template<class... Args>
+    using let = typename curry<Less::value,2,Args...>::value;
 
 };
 
+struct GreaterEqual{
 
-//--------------------------
+    template<class N, class M>
+    using value = typename Bool<N::value>=M::value>::value;
 
-
-struct Less{};
-
-
-template<class X, class Y, class... Args>
-struct solve<Less,X,Y,Args...>{
-
-    template<int k>
-    using value = typename solve<Bool<(X::value<Y::value)>,Args...>::template value<k>;
-
-    using beta = solve< Bool<(X::value<Y::value)>, Args...>;
+    template<class... Args>
+    using let = typename curry<GreaterEqual::value,2,Args...>::value;
 
 };
 
+struct LessEqual{
 
-//--------------------------
+    template<class N, class M>
+    using value = typename Bool<N::value<=M::value>::value;
 
-
-struct GreaterEqual{};
-
-
-template<class X, class Y, class... Args>
-struct solve<GreaterEqual,X,Y,Args...>{
-
-    template<int k>
-    using value = typename solve<Bool<(X::value>=Y::value)>,Args...>::template value<k>;
-
-    using beta = solve< Bool<(X::value>=Y::value)>, Args...>;
+    template<class... Args>
+    using let = typename curry<LessEqual::value,2,Args...>::value;
 
 };
 
+struct Suc{
 
-//--------------------------
+    template<class N>
+    using value = Int<N::value+1>;
 
-
-struct LessEqual{};
-
-
-template<class X, class Y, class... Args>
-struct solve<LessEqual,X,Y,Args...>{
-
-    template<int k>
-    using value = typename solve<Bool<(X::value<=Y::value)>,Args...>::template value<k>;
-
-    using beta = solve< Bool<(X::value<=Y::value)>, Args...>;
+    template<class... Args>
+    using let = typename curry<Suc::value,1,Args...>::value;
 
 };
 
+struct IsDivisor{
 
-//----------------------------
+    template<class N, class M>
+    using value = typename Bool<(M::value%N::value)==0>::value;
 
-
-struct Suc{};
-
-
-template<class N, class... Args>
-struct solve<Suc,N,Args...>{
-
-    template<int k>
-    using value = typename solve<Int<N::value+1>,Args...>::template value<k>;
-
-    using beta = solve<Int<N::value+1>,Args...>;
+    template<class... Args>
+    using let = typename curry<IsDivisor::value,2,Args...>::value;
 
 };
 
+template<class P, class N>
+struct IsPrimeAux{
 
-//----------------------------
-
-
-struct Pre{};
-
-
-template<class N, class... Args>
-struct solve<Pre,N,Args...>{
-
-    template<int k>
-    using value = typename solve<Int<N::value-1>,Args...>::template value<k>;
-
-    using beta = solve<Int<N::value-1>,Args...>;
+    using value = Or::value<IsDivisor::value<N,P>, typename IsPrimeAux<P,Int<N::value-1>>::value>;
 
 };
 
+template<class P>
+struct IsPrimeAux<P,Int<1>>{
 
-//-----------------------------
-
-
-struct IsDivisor{};
-
-
-template<class N, class M, class... Args>
-struct solve<IsDivisor,N,M,Args...>{
-
-    template<int k>
-    using value = typename solve<Bool<(M::value%N::value)==0>,Args...>::template value<k>;
-
-    using beta = typename solve<Bool<(M::value%N::value)==0>,Args...>::beta;
+    using value = False;
 
 };
 
+struct IsPrime{
 
-//------------------------------
+    template<class N>
+    using value = Not::value<typename IsPrimeAux<N,Int<N::value-1>>::value>;
 
-
-struct IsPrime{};
-struct IsPrimeAux{};
-
-
-template<class P, class N, class... Args>
-struct solve<IsPrimeAux,P,N,Args...>{
-
-    template<int k>
-    using value = typename solve<Or,
-                                    typename solve<IsDivisor,N,P>::template value<0>,
-                                    typename solve<IsPrimeAux,P,Int<N::value-1>>::template value<0>,
-                                 Args...>::template value<k>;
-
-    using beta = solve<Or,
-                          typename solve<IsDivisor,N,P>::template value<0>,
-                          typename solve<IsPrimeAux,P,Int<N::value-1>>::template value<0>,
-                       Args...>;
+    template<class... Args>
+    using let = typename curry<IsPrime::value,1,Args...>::value;
 
 };
-
-
-template<class P, class... Args>
-struct solve<IsPrimeAux,P,Int<1>,Args...>{
-
-    template<int k>
-    using value = typename solve<False, Args...>::template value<k>;
-
-    using beta = solve<False, Args...>;
-
-};
-
-
-template<class N, class... Args>
-struct solve<IsPrime,N,Args...>{
-
-    template<int k>
-    using value = typename solve<Not,
-                                     typename solve<IsPrimeAux,N,Int<N::value-1>>::template value<0>,
-                                 Args...>::template value<k>;
-
-    using beta = solve<Not,
-                           typename solve<IsPrimeAux,N,Int<N::value-1>>::template value<0>,
-                       Args...>;
-
-};
-
 
 
 #endif // INTEGER_H_INCLUDED
