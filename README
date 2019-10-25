@@ -3,11 +3,11 @@ Libreria básica para calculo funcional con Templates.
 
 1.
 #define NEED_FLOAT true
-Bool<NEED_FLOAT>::value<float,int> variable = 3.5;
+Bool<NEED_FLOAT>::uncurry<float,int> variable = 3.5;
 
 
 2.
 IsPrime::let<7>::let<int>::let<string> variable; //Variable de tipo int
-IsPrime::value<7>::value<int,string> variable; //Equivalente al anterior
-IsPrime::let<8>::let<int,string> variable; //Variable de tipo string
+IsPrime::let<7>::let<int,string> variable; //Equivalente al anterior
+IsPrime::let<8>::let<int>::let<string> variable; //Variable de tipo string
 
