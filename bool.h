@@ -7,75 +7,75 @@
 
 struct True{
 
-    static const bool b_value = true;
+    static const bool value = true;
 
     template<class X, class Y>
-    using value = X;
+    using uncurry = X;
 
     template<class... Args>
-    using let = typename curry<True::value,2,Args...>::value;
+    using let = curry<True::uncurry,2,Args...>;
 
 };
 
 struct False{
 
-    static const bool b_value = false;
+    static const bool value = false;
 
     template<class X, class Y>
-    using value = Y;
+    using uncurry = Y;
 
     template<class... Args>
-    using let = typename curry<False::value,2,Args...>::value;
+    using let = curry<False::uncurry,2,Args...>;
 
 };
 
 template<bool b>
-struct Bool{
+struct B{
     using value = True;
 };
 
 template<>
-struct Bool<false>{
+struct B<false>{
     using value = False;
 };
 
 struct Not{
 
     template<class X>
-    using value = typename X::template let<False>::template let<True>;
+    using uncurry = typename X::template let<False>::template let<True>;
 
     template<class... Args>
-    using let = typename curry<Not::value,1,Args...>::value;
+    using let = curry<Not::uncurry,1,Args...>;
 
 };
 
 struct And{
 
     template<class X, class Y>
-    using value = typename X::template let<Y>::template let<False>;
+    using uncurry = typename X::template let<Y>::template let<False>;
 
     template<class... Args>
-    using let = typename curry<And::value,2,Args...>::value;
+    using let = curry<And::uncurry,2,Args...>;
 
 };
 
 struct Or{
 
     template<class X, class Y>
-    using value = typename X::template let<True>::template let<Y>;
+    using uncurry = typename X::template let<True>::template let<Y>;
 
     template<class... Args>
-    using let = typename curry<Or::value,2,Args...>::value;
+    using let = curry<Or::uncurry,2,Args...>;
 
 };
 
 struct IfThenElse{
 
     template<class P, class Q, class R>
-    using value = typename P::template let<Q>::template let<R>;
+    using uncurry = typename P::template let<Q>::template let<R>;
 
     template<class... Args>
-    using let = typename curry<IfThenElse::value,3,Args...>::value;
+    using let = curry<IfThenElse::uncurry,3,Args...>;
 
 };
 

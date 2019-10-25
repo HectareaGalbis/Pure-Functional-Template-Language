@@ -4,32 +4,32 @@
 #include "curry.h"
 #include "tuple.h"
 
+//template<int k>
+//struct ChI{
+//
+//    template<class F, class X>
+//    using value = typename Rep<k>::template let<F>::template let<X>;;
+//
+//    template<class... Args>
+//    using let = typename curry<ChI<k>::value,2,Args...>::value;
+//
+//};
+//
+//struct ChSuc{
+//
+//    template<class N, class F, class X>
+//    using value = typename N::template let<F>::template let<typename F::template let<X>>;
+//
+//    template<class... Args>
+//    using let = typename curry<ChSuc::value,3,Args...>::value;
+//
+//};
+//
+////------------------------
+
+
 template<int k>
-struct ChInt{
-
-    template<class F, class X>
-    using value = typename Rep<k>::template let<F>::template let<X>;;
-
-    template<class... Args>
-    using let = typename curry<ChInt<k>::value,2,Args...>::value;
-
-};
-
-struct ChSuc{
-
-    template<class N, class F, class X>
-    using value = typename N::template let<F>::template let<typename F::template let<X>>;
-
-    template<class... Args>
-    using let = typename curry<ChSuc::value,3,Args...>::value;
-
-};
-
-//------------------------
-
-
-template<int k>
-struct Int{
+struct I{
 
     static const int value = k;
 
@@ -38,142 +38,142 @@ struct Int{
 struct Plus{
 
     template<class N, class M>
-    using value = Int<N::value+M::value>;
+    using uncurry = I<N::value+M::value>;
 
     template<class... Args>
-    using let = typename curry<Plus::value,2,Args...>::value;
+    using let = curry<Plus::uncurry,2,Args...>;
 
 };
 
 struct Minus{
 
     template<class N, class M>
-    using value = Int<N::value-M::value>;
+    using uncurry = I<N::value-M::value>;
 
     template<class... Args>
-    using let = typename curry<Minus::value,2,Args...>::value;
+    using let = curry<Minus::uncurry,2,Args...>;
 
 };
 
 struct Mult{
 
     template<class N, class M>
-    using value = Int<N::value*M::value>;
+    using uncurry = I<N::value*M::value>;
 
     template<class... Args>
-    using let = typename curry<Mult::value,2,Args...>::value;
+    using let = curry<Mult::uncurry,2,Args...>;
 
 };
 
 struct Div{
 
     template<class N, class M>
-    using value = Int<N::value/M::value>;
+    using uncurry = I<N::value/M::value>;
 
     template<class... Args>
-    using let = typename curry<Div::value,2,Args...>::value;
+    using let = curry<Div::uncurry,2,Args...>;
 
 };
 
 struct Mod{
 
     template<class N, class M>
-    using value = Int<N::value%M::value>;
+    using uncurry = I<N::value%M::value>;
 
     template<class... Args>
-    using let = typename curry<Mod::value,2,Args...>::value;
+    using let = curry<Mod::uncurry,2,Args...>;
 
 };
 
 struct Opp{
 
     template<class N>
-    using value = Int<-N::value>;
+    using uncurry = I<-N::value>;
 
     template<class... Args>
-    using let = typename curry<Opp::value,1,Args...>::value;
+    using let = curry<Opp::uncurry,1,Args...>;
 
 };
 
 struct Equal{
 
     template<class N, class M>
-    using value = typename Bool<N::value==M::value>::value;
+    using uncurry = typename B<N::value==M::value>::value;
 
     template<class... Args>
-    using let = typename curry<Equal::value,2,Args...>::value;
+    using let = curry<Equal::uncurry,2,Args...>;
 
 };
 
 struct Greater{
 
     template<class N, class M>
-    using value = typename Bool<(N::value>M::value)>::value;
+    using uncurry = typename B<(N::value>M::value)>::value;
 
     template<class... Args>
-    using let = typename curry<Greater::value,2,Args...>::value;
+    using let = curry<Greater::uncurry,2,Args...>;
 
 };
 
 struct Less{
 
     template<class N, class M>
-    using value = typename Bool<N::value<M::value>::value;
+    using uncurry = typename B<N::value<M::value>::value;
 
     template<class... Args>
-    using let = typename curry<Less::value,2,Args...>::value;
+    using let = curry<Less::uncurry,2,Args...>;
 
 };
 
 struct GreaterEqual{
 
     template<class N, class M>
-    using value = typename Bool<N::value>=M::value>::value;
+    using uncurry = typename B<N::value>=M::value>::value;
 
     template<class... Args>
-    using let = typename curry<GreaterEqual::value,2,Args...>::value;
+    using let = curry<GreaterEqual::uncurry,2,Args...>;
 
 };
 
 struct LessEqual{
 
     template<class N, class M>
-    using value = typename Bool<N::value<=M::value>::value;
+    using uncurry = typename B<N::value<=M::value>::value;
 
     template<class... Args>
-    using let = typename curry<LessEqual::value,2,Args...>::value;
+    using let = curry<LessEqual::uncurry,2,Args...>;
 
 };
 
 struct Suc{
 
     template<class N>
-    using value = Int<N::value+1>;
+    using uncurry = I<N::value+1>;
 
     template<class... Args>
-    using let = typename curry<Suc::value,1,Args...>::value;
+    using let = curry<Suc::uncurry,1,Args...>;
 
 };
 
 struct IsDivisor{
 
     template<class N, class M>
-    using value = typename Bool<(M::value%N::value)==0>::value;
+    using uncurry = typename B<(M::value%N::value)==0>::value;
 
     template<class... Args>
-    using let = typename curry<IsDivisor::value,2,Args...>::value;
+    using let = curry<IsDivisor::uncurry,2,Args...>;
 
 };
 
 template<class P, class N>
 struct IsPrimeAux{
 
-    using value = Or::value<IsDivisor::value<N,P>, typename IsPrimeAux<P,Int<N::value-1>>::value>;
+    using value = Or::uncurry<IsDivisor::uncurry<N,P>, typename IsPrimeAux<P,I<N::value-1>>::value>;
 
 };
 
 template<class P>
-struct IsPrimeAux<P,Int<1>>{
+struct IsPrimeAux<P,I<1>>{
 
     using value = False;
 
@@ -182,10 +182,10 @@ struct IsPrimeAux<P,Int<1>>{
 struct IsPrime{
 
     template<class N>
-    using value = Not::value<typename IsPrimeAux<N,Int<N::value-1>>::value>;
+    using uncurry = Not::let<typename IsPrimeAux<N,I<N::value-1>>::value>;
 
     template<class... Args>
-    using let = typename curry<IsPrime::value,1,Args...>::value;
+    using let = curry<IsPrime::uncurry,1,Args...>;
 
 };
 

@@ -31,9 +31,7 @@ struct aux<F,true,0,Args...>{
 
 
 template<template<class...> class F, int k, class... Args>
-struct curry{
-    using value = typename aux<F,((k-length<Args...>::value)>=0),k-length<Args...>::value,Args...>::value;
-};
+using curry = typename aux<F,((k-length<Args...>::value)>=0),k-length<Args...>::value,Args...>::value;
 
 
 /**
@@ -41,15 +39,16 @@ struct curry{
         - value define la funcion.
         - let permite la currificacion.
 */
-struct TrueSample{
+struct TrueExample{
 
     template<class X, class Y>
-    using value = X;
+    using uncurry = X;
 
     template<class... Args>
-    using let = typename curry<TrueSample::value,2,Args...>::value;
+    using let = curry<TrueSample::uncurry,2,Args...>;
 
 };
+
 
 
 #endif // CURRY_H_INCLUDED

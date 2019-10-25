@@ -3,6 +3,6 @@
 
 #include "bool.h"
 #include "integer.h"
-#include "tuple.h"
+//#include "tuple.h"
 
 #endif // PUREFUNCTIONAL_H_INCLUDED
