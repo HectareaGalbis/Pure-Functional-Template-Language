@@ -1,13 +1,25 @@
-Libreria básica para calculo funcional con Templates.
+
+# Pure Functional Template Language
+
+Esta librería intenta acercarse a lenguajes funcionales puros mediante el uso de templates.
+
+## Empezando
+
+La librería consta de ficheros header (.h), por tanto lo único necesario es importarlas a tu proyecto.
+
+### Requisitos
+
+Se requiere como mínimo C++14.
 
 
-1.
-#define NEED_FLOAT true
-Bool<NEED_FLOAT>::uncurry<float,int> variable = 3.5;
+## Funciones
 
+Quien haya indagado en C++ tarde o temprano se encuentra con las meta-funciones:
 
-2.
-IsPrime::let<7>::let<int>::let<string> variable; //Variable de tipo int
-IsPrime::let<7>::let<int,string> variable; //Equivalente al anterior
-IsPrime::let<8>::let<int>::let<string> variable; //Variable de tipo string
+```
+template<class X, class Y>
+struct myFunction{
+  using type = //...
+}
+```
 
