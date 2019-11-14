@@ -33,3 +33,15 @@ struct myFunction{
 ```
 
 Ahora los parámetros se pasan tarde. ¿Qué consecuencias tiene esto? Nuestra función va a ser la clase myFunction, es decir, las funciones serán clases. Además podemos pasar como parámetros otras clases, es decir, otras funciones. Y como type es un alias de otra clase significa que estamos retornando otra función (o un tipo de dato como int).
+
+### Ejemplo
+
+```cpp
+template<int k>
+struct Sucesor{
+    static const int value = k+1;
+}
+
+template<int k>
+
+```
