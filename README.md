@@ -16,7 +16,7 @@ Se requiere como mínimo C++14.
 
 Quien haya indagado en C++ tarde o temprano se encuentra con las meta-funciones:
 
-```
+```cpp
 template<class X, class Y>
 struct myFunction{
   using type = //...
