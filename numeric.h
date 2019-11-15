@@ -3,6 +3,8 @@
 
 #include "curry.h"
 
+#define DEF_TYPE int64_t
+
 namespace pftl{
 
 //template<int k>
@@ -40,7 +42,7 @@ struct plus_gUncurry{
 template<class S>
 using plus_g = Curryfication<plus_gUncurry<S>,S(S,S)>;
 
-using plus = plus_g<int64_t>;
+using plus = plus_g<DEF_TYPE>;
 
 
 template<class S>
@@ -54,7 +56,7 @@ struct minus_gUncurry{
 template<class S>
 using minus_g = Curryfication<minus_gUncurry<S>,S(S,S)>;
 
-using minus = minus_g<int64_t>;
+using minus = minus_g<DEF_TYPE>;
 
 
 template<class S>
@@ -68,7 +70,7 @@ struct mult_gUncurry{
 template<class S>
 using mult_g = Curryfication<mult_gUncurry<S>,S(S,S)>;
 
-using mult = mult_g<int64_t>;
+using mult = mult_g<DEF_TYPE>;
 
 
 template<class S>
@@ -82,7 +84,7 @@ struct div_gUncurry{
 template<class S>
 using div_g = Curryfication<div_gUncurry<S>,S(S,S)>;
 
-using div = div_g<int64_t>;
+using div = div_g<DEF_TYPE>;
 
 
 template<class S>
@@ -96,7 +98,7 @@ struct mod_gUncurry{
 template<class S>
 using mod_g = Curryfication<mod_gUncurry<S>,S(S,S)>;
 
-using mod = mod_g<int64_t>;
+using mod = mod_g<DEF_TYPE>;
 
 
 template<class S>
@@ -110,7 +112,7 @@ struct equal_gUncurry{
 template<class S>
 using equal_g = Curryfication<equal_gUncurry<S>,bool(S,S)>;
 
-using equal = equal_g<int64_t>;
+using equal = equal_g<DEF_TYPE>;
 
 
 template<class S>
@@ -124,7 +126,7 @@ struct greater_gUncurry{
 template<class S>
 using greater_g = Curryfication<greater_gUncurry<S>,bool(S,S)>;
 
-using greater = greater_g<int64_t>;
+using greater = greater_g<DEF_TYPE>;
 
 
 template<class S>
@@ -138,7 +140,7 @@ struct less_gUncurry{
 template<class S>
 using less_g = Curryfication<less_gUncurry<S>,bool(S,S)>;
 
-using less = less_g<int64_t>;
+using less = less_g<DEF_TYPE>;
 
 
 template<class S>
@@ -152,7 +154,7 @@ struct greaterEqual_gUncurry{
 template<class S>
 using greaterEqual_g = Curryfication<greaterEqual_gUncurry<S>,bool(S,S)>;
 
-using greaterEqual = greaterEqual_g<int64_t>;
+using greaterEqual = greaterEqual_g<DEF_TYPE>;
 
 
 template<class S>
@@ -166,7 +168,7 @@ struct lessEqual_gUncurry{
 template<class S>
 using lessEqual_g = Curryfication<lessEqual_gUncurry<S>,bool(S,S)>;
 
-using lessEqual = lessEqual_g<int64_t>;
+using lessEqual = lessEqual_g<DEF_TYPE>;
 
 
 template<class S>
@@ -177,7 +179,7 @@ struct suc_g{
 
 };
 
-using suc = suc_g<int64_t>;
+using suc = suc_g<DEF_TYPE>;
 
 
 template<class S>
@@ -188,7 +190,7 @@ struct pre_g{
 
 };
 
-using pre = pre_g<int64_t>;
+using pre = pre_g<DEF_TYPE>;
 
 //template<class S>
 //struct isDivisor_gUncurry{
