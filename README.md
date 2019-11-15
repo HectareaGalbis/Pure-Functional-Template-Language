@@ -64,3 +64,34 @@ int main(){
 > Output: 36
 
 Primero se ejecuta Sucesor::value<5> = 6, y despues se ejecuta Cuadrado::value<6> = 36.
+
+## Funciones curryficadas
+
+Se dice que una función está curryficada cuando puede tomar sus parámetros de uno en uno. Esto significa que al tomar un parámetro, nuestra función devuelve otra función que recibe un parámetro menos. 
+
+### Ejemplo
+
+```cpp
+
+struct Max{         // <-- Funcion curryficada que devuelve el máximo de dos enteros.
+    template<int m>
+    struct let{
+        template<int n>
+        using let = m > n ? m : n;
+    }
+}
+
+using Max5 = Max::let<5>;   // <-- Pasando un parámetro a Max, recibimos una nueva función.
+
+int main(){
+
+    static const n = 7;
+    static const k = 3;
+
+    std::cout << "El máximo entre 5 y " << n << " es: " << Max5::let<n> << td::endl;
+    std::cout << "El máximo entre 5 y " << k<< " es: " << Max5::let<k> <<std::endl;
+
+}
+
+```
+> Output: El máximo entre 5 y 7 es: 7
