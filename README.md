@@ -112,6 +112,7 @@ El máximo entre 5 y 3 es: 5
 La función Max anterior recibía dos parámetros pero, ¿y si queremos una función curryficada con 5 parámetros? Uno ya puede ver que tendríamos unos cuantos structs anidados. 
 
 ```cpp
+
 struct MegaFunc{
     template<class Var1>
     struct let{
@@ -128,6 +129,31 @@ struct MegaFunc{
         }
     }
 }
+
 ```
 
-Esto no es viable. En el fichero 'curry.h' se encuentra la clase Curryfication, que nos permite curryficar una función no curryficada.
+Esto no es viable (y duele verlo). En el fichero 'curry.h' se encuentra la clase Curryfication, que nos permite curryficar una función no curryficada, pasándole como parámetros la función no curryficada y una descripción de la función. Con un ejemplo se verá más claro.
+
+```cpp
+
+struct MegaFuncUncurry{                                                             // <-- Función no curryficada
+    template<class Var1, class Var2, class Var2, class Var3, class Var4, class Var5>
+    using value = //...                                                             // <-- Es necesario que la palabra sea 'value'.
+}
+             Función no curryficada         Descripción de la función
+             ----------------------vvvvvv   -----------------vvvvvv
+using MegaFunc = Curryfication<MegaFuncUncurry,Type(Type,Type,Type,Type,Type)>;
+
+```
+
+**Type** es una clase de uso especial para Curryfication. Sirve para indicar que el tipo de parámetro o de retorno es una clase. En este caso MegaFunc es una función que recibe 5 clases y devuelve una clase. Veamos otro ejemplo en el que se curryficamos la función std::condition.
+
+```cpp
+
+struct CondUncurry{
+    template<bool b,class X, class Y>
+    using value = std::condition<b,X,Y>::type;
+}
+
+```
+
