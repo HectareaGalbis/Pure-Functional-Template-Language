@@ -37,11 +37,29 @@ Ahora los parámetros se pasan tarde. ¿Qué consecuencias tiene esto? Nuestra f
 ### Ejemplo
 
 ```cpp
-template<int k>
-struct Sucesor{
+
+struct Sucesor{             // <-- Función que recibe un entero devuelve su sucesor.
+    template<int k>     
     static const int value = k+1;
 }
 
-template<int k>
+struct Cuadrado{            // <-- Función que recibe un entero y devuelve su cuadrado.
+    template<int k>
+    static const int value = k*k;   
+}
+
+
+struct Comp{                // <-- Función que recibe dos funciones y un entero resultado de F(G(k)).
+    template<class F, class G, int k>
+    static const int value = F::template value<G::template value<k>>;
+}
+
+int main(){
+
+    std::cout << Comp::value<Cuandrado,Sucesor,5> << std::endl;
+
+}
 
 ```
+> Output: 36
+Primero se ejecuta Sucesor::value<5> = 6, y despues se ejecuta Cuadrado::value<6> = 36.
