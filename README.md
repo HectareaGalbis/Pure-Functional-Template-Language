@@ -61,7 +61,8 @@ int main(){
 }
 
 ```
-> Output: 36
+> Output: 
+> 36
 
 Primero se ejecuta Sucesor::value<5> = 6, y despues se ejecuta Cuadrado::value<6> = 36.
 
@@ -88,10 +89,12 @@ int main(){
     static const n = 7;
     static const k = 3;
 
-    std::cout << "El máximo entre 5 y " << n << " es: " << Max5::let<n> << td::endl;
-    std::cout << "El máximo entre 5 y " << k<< " es: " << Max5::let<k> <<std::endl;
+    std::cout << "El máximo entre 5 y " << n << " es: " << Max5::let<n> << std::endl;
+    std::cout << "El máximo entre 5 y " << k << " es: " << Max5::let<k> << std::endl;
 
 }
 
 ```
-> Output: El máximo entre 5 y 7 es: 7
+> Output: 
+> El máximo entre 5 y 7 es: 7
+> El máximo entre 5 y 3 es: 5
