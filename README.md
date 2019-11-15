@@ -61,8 +61,11 @@ int main(){
 }
 
 ```
+
 Output: 
+```
     36
+```
 
 Primero se ejecuta Sucesor::value<5> = 6, y despues se ejecuta Cuadrado::value<6> = 36.
 
@@ -95,10 +98,11 @@ int main(){
 }
 
 ```
+
 Output: 
-    El máximo entre 5 y 7 es: 7
-    El máximo entre 5 y 3 es: 5
-
-
+```
+El máximo entre 5 y 7 es: 7
+El máximo entre 5 y 3 es: 5
+```
 
 > Cuando alguien maneja meta-funciones suele usar variables como value o type para retornar los valores. Yo voy a utilizar siempre la palabra 'let' para las funcionas curryficadas, como ya se ha visto en el ejemplo anterior.
