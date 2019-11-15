@@ -61,7 +61,7 @@ int main(){
 }
 
 ```
-> Output: 
+Output: 
 > 36
 
 Primero se ejecuta Sucesor::value<5> = 6, y despues se ejecuta Cuadrado::value<6> = 36.
@@ -95,6 +95,7 @@ int main(){
 }
 
 ```
-> Output: 
+Output: 
 > El máximo entre 5 y 7 es: 7
+
 > El máximo entre 5 y 3 es: 5
