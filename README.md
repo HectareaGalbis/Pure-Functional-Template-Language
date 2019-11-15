@@ -181,4 +181,30 @@ varInt tiene valor: 3
 varFloat tiene valor: 3.5
 ```
 
+Aunque no es *Curry* todo lo que reluce :D . Curryfication tiene algunas limitaciones impuestas por cómo funcionan los templates de C++: Una función no curryficada debe tener los **parámetros non-type a la izquierda** y **los parámetros type a la derecha**. Pero que no cunda el pánico, podemos arreglar esto en la descripción de la función que le pasamos a Currification.
+
+```cpp
+
+struct myFunctionUncurry{                       // <-- No podremos curryficar la función.
+    template<class X, int k, class Y, int l>    
+    static const bool value = //...
+}
+
+//Compilará, pero no podremos llegar a pasarle todos los parámetros.
+using myFunction = Currification<myFunctionUncurry,bool(Type,int,Type,int)>;    
+
+```
+
+```cpp
+
+struct myFunctionUncurry{                       // <-- Sí podremos curryficar la función.
+    template<int k, int l, class X, class Y>    // <-- Non-type (int k, int l) están en la izquierda y 
+    static const bool value = //...             //     types (class X, class Y) están a la derecha.
+}
+
+//En la descripción ordenamos los parámetros como queramos.
+using myFunction = Currification<myFunctionUncurry,bool(Type,int,Type,int)>;  // <-- Correcto, leerá en este orden: (X,k,Y,l).
+
+```
+
 
