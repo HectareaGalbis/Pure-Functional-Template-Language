@@ -106,3 +106,28 @@ El máximo entre 5 y 3 es: 5
 ```
 
 > Cuando alguien maneja meta-funciones suele usar variables como value o type para retornar los valores. Yo voy a utilizar siempre la palabra 'let' para las funcionas curryficadas, como ya se ha visto en el ejemplo anterior.
+
+## Curryficación de funciones no curryficadas.
+
+La función Max anterior recibía dos parámetros pero, ¿y si queremos una función curryficada con 5 parámetros? Uno ya puede ver que tendríamos unos cuantos structs anidados. 
+
+```cpp
+struct MegaFunc{
+    template<class Var1>
+    struct let{
+        template<class Var2>
+        struct let{
+            template<class Var3>
+            struct let{
+                template<class Var4>
+                struct let{
+                    template<class Var5>
+                    using let = //...
+                }
+            }
+        }
+    }
+}
+```
+
+Esto no es viable. En el fichero 'curry.h' se encuentra la clase Curryfication, que nos permite curryficar una función no curryficada.
