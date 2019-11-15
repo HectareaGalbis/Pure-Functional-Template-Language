@@ -192,6 +192,88 @@ struct pre_g{
 
 using pre = pre_g<DEF_TYPE>;
 
+
+template<class S>
+struct not_bit_g{
+
+    template<S n>
+    static const S let = ~n;
+
+};
+
+using not_bit = not_bit_g<DEF_TYPE>;
+
+
+template<class S>
+struct and_bit_gUncurry{
+
+    template<S m, S n>
+    static const S value = m&n;
+
+};
+
+template<class S>
+using and_bit_g = Curryfication<and_bit_gUncurry<S>,S(S,S)>;
+
+using and_bit = and_bit_g<DEF_TYPE>;
+
+
+template<class S>
+struct or_bit_gUncurry{
+
+    template<S m, S n>
+    static const S value = m|n;
+
+};
+
+template<class S>
+using or_bit_g = Curryfication<or_bit_gUncurry<S>,S(S,S)>;
+
+using or_bit = or_bit_g<DEF_TYPE>;
+
+
+template<class S>
+struct xor_bit_gUncurry{
+
+    template<S m, S n>
+    static const S value = m^n;
+
+};
+
+template<class S>
+using xor_bit_g = Curryfication<xor_bit_gUncurry<S>,S(S,S)>;
+
+using xor_bit = xor_bit_g<DEF_TYPE>;
+
+
+template<class S>
+struct shift_left_gUncurry{
+
+    template<S m, S n>
+    static const S value = m << n;
+
+};
+
+template<class S>
+using shift_left_g = Curryfication<shift_left_gUncurry<S>,S(S,S)>;
+
+using shift_left = shift_left_g<DEF_TYPE>;
+
+
+template<class S>
+struct shift_right_gUncurry{
+
+    template<S m, S n>
+    static const S value = m >> n;
+
+};
+
+template<class S>
+using shift_right_g = Curryfication<shift_right_gUncurry<S>,S(S,S)>;
+
+using shift_right = shift_right_g<DEF_TYPE>;
+
+
 //template<class S>
 //struct isDivisor_gUncurry{
 //
