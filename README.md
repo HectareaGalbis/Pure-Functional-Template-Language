@@ -107,7 +107,7 @@ El máximo entre 5 y 3 es: 5
 
 > Cuando alguien maneja meta-funciones suele usar variables como value o type para retornar los valores. Yo voy a utilizar siempre la palabra 'let' para las funcionas curryficadas, como ya se ha visto en el ejemplo anterior.
 
-## Curryficación de funciones no curryficadas.
+## Curryficación de funciones no curryficadas
 
 La función Max anterior recibía dos parámetros pero, ¿y si queremos una función curryficada con 5 parámetros? Uno ya puede ver que tendríamos unos cuantos structs anidados. 
 
@@ -181,7 +181,7 @@ varInt tiene valor: 3
 varFloat tiene valor: 3.5
 ```
 
-Aunque no es *Curry* todo lo que reluce :D . Curryfication tiene algunas limitaciones impuestas por cómo funcionan los templates de C++: Una función no curryficada debe tener los **parámetros non-type a la izquierda** y **los parámetros type a la derecha**. Pero que no cunda el pánico, podemos arreglar esto en la descripción de la función que le pasamos a Currification.
+Aunque no es *Curry* todo lo que reluce :D . Curryfication tiene algunas limitaciones impuestas por cómo funcionan los templates de C++: Una función no curryficada debe tener los **parámetros non-type a la izquierda** y **los parámetros type a la derecha**. Pero que no cunda el pánico, podemos arreglar esto en la descripción de la función que le pasamos a Curryfication.
 
 ```cpp
 
@@ -191,7 +191,7 @@ struct myFunctionUncurry{                       // <-- No podremos curryficar la
 }
 
 //Compilará, pero no podremos llegar a pasarle todos los parámetros.
-using myFunction = Currification<myFunctionUncurry,bool(Type,int,Type,int)>;    
+using myFunction = Curryfication<myFunctionUncurry,bool(Type,int,Type,int)>;    
 
 ```
 
@@ -203,8 +203,34 @@ struct myFunctionUncurry{                       // <-- Sí podremos curryficar l
 }
 
 //En la descripción ordenamos los parámetros como queramos.
-using myFunction = Currification<myFunctionUncurry,bool(Type,int,Type,int)>;  // <-- Correcto, leerá en este orden: (X,k,Y,l).
+using myFunction = Curryfication<myFunctionUncurry,bool(Type,int,Type,int)>;  // <-- Correcto, leerá en este orden: (X,k,Y,l).
 
 ```
 
+## Definición de nuevas funciones
+
+Hemos comenzado viendo que podemos curryficar funciones con struct let anidados o con la clase Curryfication. Entonces, ¿cuál debo usar? Literalmente, la que quieras, la que te sea más cómoda. Si no te decides, puedes seguir el siguiente procedimiento:
+
+```cpp
+
+// ¿Se puede obtener a partir de otra función?
+using myFunctionDerived = myFunctionBase::let<Something>;
+
+
+// ¿Sólo recibe un parámetro?
+struct myFunction{              // <-- Ya está curryficada.
+    template<class X>       
+    using let = //...
+}
+
+
+// ¿Recibe más de un parámetro?
+struct myFunctionUncurry{
+    template<char c, int k, class X, class Y>
+    static const bool value = //...
+}
+
+using myFunction = Curryfication<myFunctionUncurry,bool(Type,char,int,Type)>;
+
+```
 
