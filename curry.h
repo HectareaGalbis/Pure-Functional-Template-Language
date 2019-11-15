@@ -3,6 +3,8 @@
 
 #include <string>
 
+namespace pftl{
+
 
 struct Type{};
 
@@ -175,6 +177,6 @@ using LeftOrRightExample = Curryfication<LeftOrRightExampleUncurry,Type(Type,int
 //
 //};
 
-
+}
 
 #endif // CURRY_H_INCLUDED
