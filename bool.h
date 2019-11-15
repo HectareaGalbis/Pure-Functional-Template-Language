@@ -4,81 +4,91 @@
 #include "curry.h"
 
 
+namespace pftl{
 
-struct True{
+//struct False;
+//
+//struct True{
+//
+//    using type = bool;
+//    static const bool value = true;
+//
+//    template<class X, class Y>
+//    using uncurry = X;
+//
+//    template<class... Args>
+//    using let = curry<True::uncurry,2,Args...>;
+//
+//    using _not = False;
+//
+//    template<class S>
+//    using _and = S;
+//
+//    template<class S>
+//    using _or = True;
+//
+//};
+//
+//struct False{
+//
+//    using type = bool;
+//    static const bool value = false;
+//
+//    template<class X, class Y>
+//    using uncurry = Y;
+//
+//    template<class... Args>
+//    using let = curry<False::uncurry,2,Args...>;
+//
+//    using _not = True;
+//
+//    template<class S>
+//    using _and = False;
+//
+//    template<class S>
+//    using _or = S;
+//
+//};
+//
+//template<bool b>
+//struct B_impl{
+//    using value = True;
+//};
+//
+//template<>
+//struct B_impl<false>{
+//    using value = False;
+//};
+//
+//template<bool b>
+//using B = typename B_impl<b>::value;
 
-    static const bool value = true;
+struct not_logic{
 
-    template<class X, class Y>
-    using uncurry = X;
-
-    template<class... Args>
-    using let = curry<True::uncurry,2,Args...>;
-
-};
-
-struct False{
-
-    static const bool value = false;
-
-    template<class X, class Y>
-    using uncurry = Y;
-
-    template<class... Args>
-    using let = curry<False::uncurry,2,Args...>;
-
-};
-
-template<bool b>
-struct B{
-    using value = True;
-};
-
-template<>
-struct B<false>{
-    using value = False;
-};
-
-struct Not{
-
-    template<class X>
-    using uncurry = typename X::template let<False>::template let<True>;
-
-    template<class... Args>
-    using let = curry<Not::uncurry,1,Args...>;
-
-};
-
-struct And{
-
-    template<class X, class Y>
-    using uncurry = typename X::template let<Y>::template let<False>;
-
-    template<class... Args>
-    using let = curry<And::uncurry,2,Args...>;
-
-};
-
-struct Or{
-
-    template<class X, class Y>
-    using uncurry = typename X::template let<True>::template let<Y>;
-
-    template<class... Args>
-    using let = curry<Or::uncurry,2,Args...>;
-
-};
-
-struct IfThenElse{
-
-    template<class P, class Q, class R>
-    using uncurry = typename P::template let<Q>::template let<R>;
-
-    template<class... Args>
-    using let = curry<IfThenElse::uncurry,3,Args...>;
+    template<bool p>
+    static const bool let = !p;
 
 };
 
+struct and_logicUncurry{
 
+    template<bool p, bool q>
+    static const bool value = p && q;
+
+};
+
+using and_logic = Curryfication<and_logicUncurry,bool(bool,bool)>;
+
+struct or_logicUncurry{
+
+    template<bool p, bool q>
+    static const bool value = p || q;
+
+};
+
+using or_logic = Curryfication<or_logicUncurry,bool(bool,bool)>;
+
+
+}
 
 #endif // BOLEANCHURCH_H_INCLUDED
