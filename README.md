@@ -62,4 +62,5 @@ int main(){
 
 ```
 > Output: 36
+
 Primero se ejecuta Sucesor::value<5> = 6, y despues se ejecuta Cuadrado::value<6> = 36.
