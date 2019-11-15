@@ -136,9 +136,9 @@ Esto no es viable (y duele verlo). En el fichero 'curry.h' se encuentra la clase
 
 ```cpp
 
-struct MegaFuncUncurry{                                                             // <-- Función no curryficada
+struct MegaFuncUncurry{                           // <-- Función no curryficada
     template<class Var1, class Var2, class Var2, class Var3, class Var4, class Var5>
-    using value = //...                                                             // <-- Es necesario que la palabra sea 'value'.
+    using value = //...                           // <-- Es necesario que la palabra sea 'value'.
 }
              Función no curryficada         Descripción de la función
              ----------------------vvvvvv   -----------------vvvvvv
@@ -146,14 +146,39 @@ using MegaFunc = Curryfication<MegaFuncUncurry,Type(Type,Type,Type,Type,Type)>;
 
 ```
 
-**Type** es una clase de uso especial para Curryfication. Sirve para indicar que el tipo de parámetro o de retorno es una clase. En este caso MegaFunc es una función que recibe 5 clases y devuelve una clase. Veamos otro ejemplo en el que se curryficamos la función std::condition.
+**Type** es una clase de uso especial para Curryfication. Sirve para indicar que el tipo de parámetro o de retorno es una clase. En este caso MegaFunc es una función que recibe 5 clases y devuelve una clase. Veamos otro ejemplo en el que curryficamos la función std::conditional.
 
 ```cpp
 
 struct CondUncurry{
     template<bool b,class X, class Y>
-    using value = std::condition<b,X,Y>::type;
+    using value = typename std::conditional<b,X,Y>::type;
+}
+
+using Cond = Curryfication<CondUncurry,Type(bool,Type,Type)>;
+
+```
+
+En este caso la función 'Cond' recibe un booleano, dos clases y, devuelve otra clase. 
+
+```cpp
+
+int main(){
+
+    Cond::let<true>::let<int>::let<float> varInt = 3.5;
+    Cond::let<false>::let<int>::let<float> varFloat = 3.5;
+    
+    std::cout << "varInt tiene valor: " << varInt << std::endl;
+    std::cout << "varFloat tiene valor: " << varFloat << std::endl;
+
 }
 
 ```
+
+```
+Output:
+varInt tiene valor: 3
+varFloat tiene valor: 3.5
+```
+
 
