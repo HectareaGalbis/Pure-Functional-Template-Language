@@ -234,3 +234,56 @@ using myFunction = Curryfication<myFunctionUncurry,bool(Type,char,int,Type)>;
 
 ```
 
+## Recursión y meta-funciones auxiliares
+
+Como en cualquier introducción a la recursividad vamos a definir la función Fibo, que dado un entero n, nos devuelva el número que ocupa la posición n en la sucesión de Fibonacci. Un primer intento podría ser el siguiente:
+
+```cpp
+
+struct Fibo{
+
+    template<int n>
+    static const int let = n==0 ? 0 : (n==1 ? 1 : Fibo::let<n-2>+Fibo::let<n-1>);
+
+}
+
+```
+
+Si n es 0, retornamos 0. Si n es 1, retornamos 1. Y si n es otro número, retornamos la suma de los dos elementos anteriores de la sucesión de Fibonacci. Pero esto no compila. El error que se obtiene indica que estamos intentando usar un tipo de dato incompleto, en este caso Fibo. Para evitar esto debemos usar meta-funciones auxiliares:
+
+```cpp
+
+template<int n>
+struct FiboAux{                 // <-- Función general recursiva
+    static const int value = FiboAux<n-2>::value + FiboAux<n-1>::value;
+};
+
+template<>
+struct FiboAux<0>{              // <-- Especialización para n==0
+    static const int value = 0;
+};
+
+template<>
+struct FiboAux<1>{              // <-- Especialización para n==1
+    static const int value = 1;
+};
+
+struct Fibo{
+    template<int n>
+    static const int let = FiboAux<n>::value;       // <-- Llamada a la función auxiliar
+};
+
+
+int main(){
+
+    std::cout << Fibo::let<10> << std::endl;
+
+    return 0;
+}
+
+```
+
+```
+Output:
+55
+```
