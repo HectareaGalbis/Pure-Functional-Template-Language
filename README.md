@@ -5,8 +5,7 @@ Esta librería intenta acercarse a lenguajes funcionales puros mediante el uso d
 
 ## Empezando
 
-La librería consta de ficheros header (.h), por tanto lo único necesario es importarlas a tu proyecto.
-Todas los elementos de la librería están bajo el namespace pftl.
+La librería consta de ficheros header (.h), por tanto lo único necesario es importarlas a tu proyecto. Todos los elementos de la librería están bajo el namespace pftl.
 
 ### Requisitos
 
