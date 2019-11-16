@@ -44,7 +44,7 @@ struct Curry<F,Ret(S),void(MvArgs...),void(McArgs...)>{
 
     struct value{
         template<S k>
-        static const Ret let = F::template value<MvArgs::value...,k>;
+        static const Ret let = F::template value<MvArgs::value...,k,McArgs...>;
     };
 
 };
@@ -54,7 +54,7 @@ struct Curry<F,Type(S),void(MvArgs...),void(McArgs...)>{
 
     struct value{
         template<S k>
-        using let = typename F::template value<MvArgs::value...,k>;
+        using let = typename F::template value<MvArgs::value...,k,McArgs...>;
     };
 
 };
