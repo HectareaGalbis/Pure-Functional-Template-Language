@@ -1,7 +1,7 @@
 
 # Pure Functional Template Language
 
-Esta librería intenta acercarse a lenguajes funcionales puros mediante el uso de templates.
+Los templates son una herramienta bastante útil en C++ que nos permiten hacer cálculos en tiempo de compilación. Sin embargo, su uso se limita normalmente a aritmética de tipos y clases genéricas. Por otro lado, crear nuevas metafunciones suele ser algo complejo. Con este proyecto intento buscar una metodología para crear nuevas metafunciones de manera más sencilla y una librería que permita realizar cálculos en tiempo de compilación más complejos.
 
 ## Empezando
 
