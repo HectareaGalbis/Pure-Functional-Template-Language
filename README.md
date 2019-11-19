@@ -1,7 +1,7 @@
 
 # Pure Functional Template Language
 
-Los templates son una herramienta bastante útil en C++ que nos permiten hacer cálculos en tiempo de compilación. Sin embargo, su uso se limita normalmente a aritmética de tipos y clases genéricas. Por otro lado, crear nuevas metafunciones suele ser algo complejo. Con este proyecto intento buscar una metodología para crear nuevas metafunciones de manera más sencilla y una librería que permita realizar cálculos en tiempo de compilación más complejos.
+Los templates son una herramienta bastante útil en C++ que nos permiten hacer cálculos en tiempo de compilación. Se usan principalmente para aritmética de tipos, perfect forwarding, y clases genéricas aprovechando el SFINAE, que no es poco. Sin embargo, la algoritmia que un programador medio utilizaría en la aritmética de tipos no es compleja (porque lo complejo es usar los templates) y, crear nuevas metafunciones rara vez se plantea. Con este proyecto intento buscar una metodología para crear nuevas metafunciones de manera más sencilla y una librería que permita realizar cálculos en tiempo de compilación más complejos.
 
 ## Situación actual
 
