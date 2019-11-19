@@ -26,7 +26,7 @@ Los templates son una herramienta bastante útil en C++ que nos permiten hacer c
 
 ## Empezando
 
-Los templates es una herramienta complicada de C++, así que no me queda otra que suponer que ya sabes manejarlos ¯\_(ツ)_/¯. 
+Los templates es una herramienta complicada de C++, así que no me queda otra que suponer que ya sabes manejarlos ¯\\_(ツ)_/¯. 
 
 ## Funciones
 
