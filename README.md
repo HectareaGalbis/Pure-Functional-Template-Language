@@ -26,7 +26,7 @@ Los [templates](https://en.wikipedia.org/wiki/Template_(C%2B%2B)) son una herram
 
 ## Empezando
 
-Los templates es una herramienta complicada de C++, así que no me queda otra que suponer que ya sabes manejarlos. A partir de ahora voy a ir explicando los elementos principales que he definiendo y veremos las principales clases y funciones que nos permitirán realizar cálculos medianamente complejos en tiempo de compilación. 
+A partir de ahora voy a ir explicando los elementos principales que he definiendo y veremos las principales clases y funciones que nos permitirán realizar cálculos medianamente complejos en tiempo de compilación. Todo el trabajo está inspirado en Haskell y en los lenguajes funcionales puros, por lo que la curryficación de funciones será el núcleo del proyecto.
 
 ## Funciones
 
