@@ -19,7 +19,7 @@ Los templates son una herramienta bastante útil en C++ que nos permiten hacer c
 * Clase Tuple (Listas de tipos de datos o clases).
 * Clase Num/Lit (Encapsulación de literales en un tipo de dato para usarlos en tuplas).
 
-### Instalación y requisitos
+## Instalación y requisitos
 
 * La librería consta de ficheros header (.h), por tanto lo único necesario es importarlas a tu proyecto. Todos los elementos de la librería están bajo el namespace pftl. 
 * Se requiere como mínimo C++14.
