@@ -3,14 +3,30 @@
 
 Los templates son una herramienta bastante útil en C++ que nos permiten hacer cálculos en tiempo de compilación. Sin embargo, su uso se limita normalmente a aritmética de tipos y clases genéricas. Por otro lado, crear nuevas metafunciones suele ser algo complejo. Con este proyecto intento buscar una metodología para crear nuevas metafunciones de manera más sencilla y una librería que permita realizar cálculos en tiempo de compilación más complejos.
 
+## Situación actual
+
+* Método para curryficar metafunciones (curry.h).
+* Funciones básicas para cálculo booleano (bool.h).
+* Funciones básicas para cálculo numérico (numeric.h).
+
+## ¿Qué busco ahora?
+
+* Cómo definir clases.
+* Cómo definir métodos en las clases.
+* Cómo crear funciones "polimórficas".
+* Clase Ratio (Números racionales).
+* Clase List (Listas de literales).
+* Clase Tuple (Listas de tipos de datos o clases).
+* Clase Num/Lit (Encapsulación de literales en un tipo de dato para usarlos en tuplas).
+
+### Instalación y requisitos
+
+* La librería consta de ficheros header (.h), por tanto lo único necesario es importarlas a tu proyecto. Todos los elementos de la librería están bajo el namespace pftl. 
+* Se requiere como mínimo C++14.
+
 ## Empezando
 
-La librería consta de ficheros header (.h), por tanto lo único necesario es importarlas a tu proyecto. Todos los elementos de la librería están bajo el namespace pftl.
-
-### Requisitos
-
-Se requiere como mínimo C++14.
-
+Los templates es una herramienta complicada de C++, así que no me queda otra que suponer que ya sabes manejarlos ¯\_(ツ)_/¯. 
 
 ## Funciones
 
