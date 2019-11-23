@@ -5,6 +5,7 @@
 
 namespace pftl{
 
+struct Undefined{};
 
 struct Type{};
 
@@ -16,79 +17,222 @@ struct ArgLit{
     };
 };
 
-template<class F, class T, class Mv, class Mc>
-struct Curry{};
+//template<class F, class T, class Mv, class Mc>
+//struct Curry{};
+//
+//template<class F, class Ret, class S, class... Args, class... MvArgs, class... McArgs>
+//struct Curry<F,Ret(S,Args...),void(MvArgs...),void(McArgs...)>{
+//
+//    struct value{
+//        template<S k>
+//        using let = typename Curry<F,Ret(Args...),void(MvArgs...,typename ArgLit<S>::template Arg<k>),void(McArgs...)>::value;
+//    };
+//
+//};
+//
+//template<class F, class Ret, class... Args, class... MvArgs, class... McArgs>
+//struct Curry<F,Ret(Type,Args...),void(MvArgs...),void(McArgs...)>{
+//
+//    struct value{
+//        template<class X>
+//        using let = typename Curry<F,Ret(Args...),void(MvArgs...),void(McArgs...,X)>::value;
+//    };
+//
+//};
+//
+//template<class F, class Ret, class S, class... MvArgs, class... McArgs>
+//struct Curry<F,Ret(S),void(MvArgs...),void(McArgs...)>{
+//
+//    struct value{
+//        template<S k>
+//        static const Ret let = F::template value<MvArgs::value...,k,McArgs...>;
+//    };
+//
+//};
+//
+//template<class F, class S, class... MvArgs, class... McArgs>
+//struct Curry<F,Type(S),void(MvArgs...),void(McArgs...)>{
+//
+//    struct value{
+//        template<S k>
+//        using let = typename F::template value<MvArgs::value...,k,McArgs...>;
+//    };
+//
+//};
+//
+//template<class F, class Ret, class... MvArgs, class... McArgs>
+//struct Curry<F,Ret(Type),void(MvArgs...),void(McArgs...)>{
+//
+//    struct value{
+//        template<class X>
+//        static const Ret let = F::template value<MvArgs::value...,McArgs...,X>;
+//    };
+//
+//};
+//
+//template<class F, class... MvArgs, class... McArgs>
+//struct Curry<F,Type(Type),void(MvArgs...),void(McArgs...)>{
+//
+//    struct value{
+//        template<class X>
+//        using let = typename F::template value<MvArgs::value...,McArgs...,X>;
+//    };
+//
+//};
+//
+//
+//template<class F, class T>
+//using Curryfication = typename Curry<F,T,void(),void()>::value;
 
-template<class F, class Ret, class S, class... Args, class... MvArgs, class... McArgs>
-struct Curry<F,Ret(S,Args...),void(MvArgs...),void(McArgs...)>{
 
-    struct value{
-        template<S k>
-        using let = typename Curry<F,Ret(Args...),void(MvArgs...,typename ArgLit<S>::template Arg<k>),void(McArgs...)>::value;
-    };
 
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+
+
+template<bool b, class Ret, Ret x>
+struct enable_if_int{};
+
+template<class Ret, Ret x>
+struct enable_if_int<true,Ret,x>{
+    static const Ret value = x;
 };
 
-template<class F, class Ret, class... Args, class... MvArgs, class... McArgs>
-struct Curry<F,Ret(Type,Args...),void(MvArgs...),void(McArgs...)>{
 
+
+template<class F, bool isInt, class T, class In, class Ty>
+struct CurryInt{};
+
+template<class F, class Ret, class Next, class Next2, class... Args, class... InArgs, class... TyArgs>
+struct CurryInt<F,true,Ret(Next,Next2,Args...),void(InArgs...),void(TyArgs...)>{
     struct value{
-        template<class X>
-        using let = typename Curry<F,Ret(Args...),void(MvArgs...),void(McArgs...,X)>::value;
+        template<Next x>
+        using let = typename CurryInt<F,std::is_integral<Next2>::value,Ret(Next2,Args...),void(InArgs...,typename ArgLit<Next>::template Arg<x>),void(TyArgs...)>::value;
     };
-
 };
 
-template<class F, class Ret, class S, class... MvArgs, class... McArgs>
-struct Curry<F,Ret(S),void(MvArgs...),void(McArgs...)>{
-
+template<class F, class Ret, class Next, class Next2, class... Args, class... InArgs, class... TyArgs>
+struct CurryInt<F,false,Ret(Next,Next2,Args...),void(InArgs...),void(TyArgs...)>{
     struct value{
-        template<S k>
-        static const Ret let = F::template value<MvArgs::value...,k,McArgs...>;
+        template<class x>
+        using let = typename std::enable_if<std::is_base_of<Next,x>::value,typename CurryInt<F,std::is_integral<Next2>::value,Ret(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value>::type;
     };
-
 };
 
-template<class F, class S, class... MvArgs, class... McArgs>
-struct Curry<F,Type(S),void(MvArgs...),void(McArgs...)>{
-
+template<class F, class Ret, class Next2, class... Args, class... InArgs, class... TyArgs>
+struct CurryInt<F,false,Ret(Type,Next2,Args...),void(InArgs...),void(TyArgs...)>{
     struct value{
-        template<S k>
-        using let = typename F::template value<MvArgs::value...,k,McArgs...>;
+        template<class x>
+        using let = typename CurryInt<F,std::is_integral<Next2>::value,Ret(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value;
     };
-
 };
 
-template<class F, class Ret, class... MvArgs, class... McArgs>
-struct Curry<F,Ret(Type),void(MvArgs...),void(McArgs...)>{
-
+template<class F, class Ret, class Next, class... InArgs, class... TyArgs>
+struct CurryInt<F,true,Ret(Next),void(InArgs...),void(TyArgs...)>{
     struct value{
-        template<class X>
-        static const Ret let = F::template value<MvArgs::value...,McArgs...,X>;
+        template<Next x>
+        static const Ret let = F::template value<InArgs::value...,x,TyArgs...>;
     };
-
 };
 
-template<class F, class... MvArgs, class... McArgs>
-struct Curry<F,Type(Type),void(MvArgs...),void(McArgs...)>{
-
+template<class F, class Ret, class Next, class... InArgs, class... TyArgs>
+struct CurryInt<F,false,Ret(Next),void(InArgs...),void(TyArgs...)>{
     struct value{
-        template<class X>
-        using let = typename F::template value<MvArgs::value...,McArgs...,X>;
+        template<class x>
+        static const Ret let = enable_if_int<std::is_base_of<Next,x>::value,Ret,F::template value<InArgs::value...,TyArgs...,x>>::value;
     };
+};
 
+template<class F, class Ret, class... InArgs, class... TyArgs>
+struct CurryInt<F,false,Ret(Type),void(InArgs...),void(TyArgs...)>{
+    struct value{
+        template<class x>
+        static const Ret let = F::template value<InArgs::value...,TyArgs...,x>;
+    };
+};
+
+
+template<class F, bool isInt, class T, class In, class Ty>
+struct CurryType{};
+
+template<class F, class Next, class Next2, class... Args, class... InArgs, class... TyArgs>
+struct CurryType<F,true,Type(Next,Next2,Args...),void(InArgs...),void(TyArgs...)>{
+    struct value{
+        template<Next x>
+        using let = typename CurryType<F,std::is_integral<Next2>::value,Type(Next2,Args...),void(InArgs...,typename ArgLit<Next>::template Arg<x>),void(TyArgs...)>::value;
+    };
+};
+
+template<class F, class Next, class Next2, class... Args, class... InArgs, class... TyArgs>
+struct CurryType<F,false,Type(Next,Next2,Args...),void(InArgs...),void(TyArgs...)>{
+    struct value{
+        template<class x>
+        using let = typename std::enable_if<std::is_base_of<Next,x>::value,typename CurryType<F,std::is_integral<Next2>::value,Type(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value>::type;
+    };
+};
+
+template<class F, class Next2, class... Args, class... InArgs, class... TyArgs>
+struct CurryType<F,false,Type(Type,Next2,Args...),void(InArgs...),void(TyArgs...)>{
+    struct value{
+        template<class x>
+        using let = typename CurryType<F,std::is_integral<Next2>::value,Type(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value;
+    };
+};
+
+template<class F, class Next, class... InArgs, class... TyArgs>
+struct CurryType<F,true,Type(Next),void(InArgs...),void(TyArgs...)>{
+    struct value{
+        template<Next x>
+        using let = typename F::template value<InArgs::value...,x,TyArgs...>;
+    };
+};
+
+template<class F, class Next, class... InArgs, class... TyArgs>
+struct CurryType<F,false,Type(Next),void(InArgs...),void(TyArgs...)>{
+    struct value{
+        template<class x>
+        using let = typename std::enable_if<std::is_base_of<Next,x>::value,typename F::template value<InArgs::value...,TyArgs...,x>>::type;
+    };
+};
+
+template<class F, class... InArgs, class... TyArgs>
+struct CurryType<F,false,Type(Type),void(InArgs...),void(TyArgs...)>{
+    struct value{
+        template<class x>
+        using let = typename F::template value<InArgs::value...,TyArgs...,x>;
+    };
+};
+
+
+template<class F, bool isRetInt, class T>
+struct CurryficationAux2{};
+
+template<class F, class Ret, class Next, class... Args>
+struct CurryficationAux2<F,true,Ret(Next,Args...)>{
+    using value = typename CurryInt<F,std::is_integral<Next>::value,Ret(Next,Args...),void(),void()>::value;
+};
+
+template<class F, class Next, class... Args>
+struct CurryficationAux2<F,false,Type(Next,Args...)>{
+    using value = typename CurryType<F,std::is_integral<Next>::value,Type(Next,Args...),void(),void()>::value;
 };
 
 
 template<class F, class T>
-using Curryfication = typename Curry<F,T,void(),void()>::value;
+struct CurryficationAux{};
 
+template<class F, class Ret, class... Args>
+struct CurryficationAux<F,Ret(Args...)>{
+    using value = typename CurryficationAux2<F,std::is_integral<Ret>::value,Ret(Args...)>::value;
+};
 
+template<class F, class T>
+using Curryfication = typename CurryficationAux<F,T>::value;
 
 //-----------------------------------------------------------
 //-----------------------------------------------------------
 //-----------------------------------------------------------
-
 
 
 template<bool c>
