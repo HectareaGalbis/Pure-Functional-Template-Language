@@ -236,12 +236,10 @@ struct myFunction{              // <-- Ya está curryficada.
 
 
 // ¿Recibe más de un parámetro?
-struct myFunctionUncurry{
+struct myFunction : public Currying<myFunction,bool(Type,char,int,Type)>;{
     template<char c, int k, class X, class Y>
     static const bool value = //...
 }
-
-using myFunction = Currying<myFunctionUncurry,bool(Type,char,int,Type)>;
 
 ```
 
