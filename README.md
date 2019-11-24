@@ -305,6 +305,12 @@ Output:
 
 Esta librería contiene un conjunto de funciones básicas (not, and, or) para el manejo de valores booleanos. Como ya existen las palabras reservadas not, and y or en C++ se usan not_logic, and_logic y or_logic.
 
+| 'bool.h' | C++ |
+| :-----------: | :-----------: |
+| `not_logic` | ! |
+| `and_logic` | && |
+| `or_logic` | \|\| |
+
 > A primera vista pueden parecer funciones prescindibles, pues ya tenemos símbolos que nos da C++ para estas operaciones. Sin embargo éstas serán útiles cuando veamos la clase List.
 
 ```cpp
