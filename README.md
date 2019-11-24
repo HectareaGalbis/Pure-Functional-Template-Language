@@ -151,28 +151,23 @@ struct megaFunc{
 Esto no es viable (y duele verlo). En el fichero 'curry.h' se encuentra la clase Currying, que nos permite curryficar una función no curryficada, pasándole como parámetros la función no curryficada y una descripción de la función. Con un ejemplo se verá más claro.
 
 ```cpp
+           //Función no curryficada           Descripción de la función
+           //----------------------vvvvvv           vvvvvvvvvvvvv
+struct megaFunc : public Currying<megaFunc,Type(Type,Type,Type,Type,Type)>{
 
-struct megaFuncUncurry{                           // <-- Función no curryficada
     template<class Var1, class Var2, class Var2, class Var3, class Var4, class Var5>
-    using value = //...                           // <-- Es necesario que la palabra sea 'value'.
+    using value = //...         // <-- Es necesario que la palabra sea 'value'.
+    
 }
-             Función no curryficada         Descripción de la función
-             ----------------------vvvvvv   -----------------vvvvvv
-using megaFunc = Currying<megaFuncUncurry,Type(Type,Type,Type,Type,Type)>;
-
 ```
 
 **Type** es una clase de uso especial para Currying. Sirve para indicar que el tipo de parámetro o de retorno es una clase. En este caso megaFunc es una función que recibe 5 clases y devuelve una clase. Veamos otro ejemplo en el que curryficamos la función std::conditional.
 
 ```cpp
-
-struct condUncurry{
+struct cond : public Currying<cond,Type(bool,Type,Type)>{
     template<bool b,class X, class Y>
     using value = typename std::conditional<b,X,Y>::type;
 }
-
-using cond = Currying<condUncurry,Type(bool,Type,Type)>;
-
 ```
 
 En este caso la función 'cond' recibe un booleano, dos clases y, devuelve otra clase. 
@@ -197,35 +192,35 @@ varInt tiene valor: 3
 varFloat tiene valor: 3.5
 ```
 
-Aunque no es *Curry* todo lo que reluce :D . Currying tiene algunas limitaciones impuestas por cómo funcionan los templates de C++: Una función no curryficada debe tener los **parámetros non-type a la izquierda** y **los parámetros type a la derecha**. Pero que no cunda el pánico, podemos arreglar esto en la descripción de la función que le pasamos a Curryfication.
+Aunque no es *Curry* todo lo que reluce :D . Currying tiene algunas limitaciones impuestas por cómo funcionan los templates de C++: Una función no curryficada debe tener los **parámetros non-type a la izquierda** y **los parámetros type a la derecha**. Pero que no cunda el pánico, podemos arreglar esto en la descripción de la función que le pasamos a Currying.
 
 ```cpp
 
-struct myFunctionUncurry{                       // <-- No podremos curryficar la función.
-    template<class X, int k, class Y, int l>    
-    static const bool value = //...
+struct myFunction : public Currying<myFunction,bool(Type,int,Type,int)>{         
+    template<class X, int k, class Y, int l>                    // <-- No podremos curryficar la función.
+    static const bool value = //...                             // Existe type (class X) a la izquierda de non-type (int k).
 }
 
 //Compilará, pero no podremos llegar a pasarle todos los parámetros.
-using myFunction = Currying<myFunctionUncurry,bool(Type,int,Type,int)>;    
 
 ```
 
 ```cpp
 
-struct myFunctionUncurry{                       // <-- Sí podremos curryficar la función.
+//En la descripción ordenamos los parámetros como queramos.
+                    ----------------------------------vvvvvvvvvvv
+struct myFunction : public Currying<myFunction,bool(Type,int,Type,int)>{            // <-- Sí podremos curryficar la función.
     template<int k, int l, class X, class Y>    // <-- Non-type (int k, int l) están en la izquierda y 
     static const bool value = //...             //     types (class X, class Y) están a la derecha.
 }
 
-//En la descripción ordenamos los parámetros como queramos.
-using myFunction = Currying<myFunctionUncurry,bool(Type,int,Type,int)>;  // <-- Correcto, leerá en este orden: (X,k,Y,l).
+//En este caso se leerán los argumentos en el siguiente orden: X , k , Y , l .
 
 ```
 
 ## Definición de nuevas funciones
 
-Hemos comenzado viendo que podemos curryficar funciones con struct let anidados o con la clase Curryfication. Entonces, ¿cuál debo usar? Literalmente, la que quieras, la que te sea más cómoda. Si no te decides, puedes seguir el siguiente procedimiento:
+Hemos comenzado viendo que podemos curryficar funciones con struct let anidados o con la clase Currying. Entonces, ¿cuál debo usar? Literalmente, la que quieras, la que te sea más cómoda. Si no te decides, puedes seguir el siguiente procedimiento:
 
 ```cpp
 
@@ -233,7 +228,7 @@ Hemos comenzado viendo que podemos curryficar funciones con struct let anidados 
 using myFunctionDerived = myFunctionBase::let<Something>;
 
 
-// ¿Sólo recibe un parámetro?
+// ¿Sólo recibe un parámetro?  (¡¡¡Ojo!!!! -> No recomendada por motivos que se explicarán en apartados siguientes)
 struct myFunction{              // <-- Ya está curryficada.
     template<class X>       
     using let = //...
@@ -250,22 +245,26 @@ using myFunction = Currying<myFunctionUncurry,bool(Type,char,int,Type)>;
 
 ```
 
-## Recursión y meta-funciones auxiliares
+## Meta-funciones auxiliares
 
-Como en cualquier introducción a la recursividad vamos a definir la función Fibo, que dado un entero n, nos devuelva el número que ocupa la posición n en la sucesión de Fibonacci. Un primer intento podría ser el siguiente:
+En muchos casos nos encontraremos con la necesidad de crear funciones recursivas o simplemente necesitaremos utilizar especializaciones de templates para conseguir unos resultados deseados. 
+
+> La especialización de templates recuerda bastante al encaje de patrones utilizado en lenguajes como Haskell.
+
+Vamos a definir la función fibo, que dado un entero n, nos devuelva el número que ocupa la posición n en la sucesión de Fibonacci. Un primer intento podría ser el siguiente:
 
 ```cpp
 
-struct fibo{
+struct fibo : public Currying<fibo,int(int)>{
 
     template<int n>
-    static const int let = n==0 ? 0 : (n==1 ? 1 : fibo::let<n-2>+fibo::let<n-1>);
+    static const int value = n==0 ? 0 : (n==1 ? 1 : fibo::let<n-2>+fibo::let<n-1>);
 
 }
 
 ```
 
-Si n es 0, retornamos 0. Si n es 1, retornamos 1. Y si n es otro número, retornamos la suma de los dos elementos anteriores de la sucesión de Fibonacci. Pero esto no compila. El error que se obtiene indica que estamos intentando usar un tipo de dato incompleto, en este caso Fibo. Para evitar esto debemos usar meta-funciones auxiliares:
+Si n es 0, retornamos 0. Si n es 1, retornamos 1. Y si n es otro número, retornamos la suma de los dos elementos anteriores de la sucesión de Fibonacci. Pero esto no compila. El error que se obtiene indica que estamos intentando usar un tipo de dato incompleto, en este caso fibo. Esto se puede entender como que al instanciar la clase fibo para un n en concreto también se instanciará para n-1 y n-2. En ningún momento estamos indicando que fibo<0> debe dejar de instanciarse, por lo que se seguirá instanciando fibo para los números negativos y así seguirá sin fin. Para evitar esto debemos usar meta-funciones auxiliares:
 
 ```cpp
 
@@ -284,9 +283,9 @@ struct fiboAux<1>{              // <-- Especialización para n==1
     static const int value = 1;
 };
 
-struct fibo{
+struct fibo : public Currying<fibo,int(int)>{
     template<int n>
-    static const int let = fiboAux<n>::value;       // <-- Llamada a la función auxiliar
+    static const int value = fiboAux<n>::value;       // <-- Llamada a la meta-función auxiliar
 };
 
 
@@ -303,3 +302,5 @@ int main(){
 Output:
 55
 ```
+
+
