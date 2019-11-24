@@ -77,7 +77,7 @@ struct and_logicUncurry{
 
 };
 
-using and_logic = Curryfication<and_logicUncurry,bool(bool,bool)>;
+using and_logic = Currying<and_logicUncurry,bool(bool,bool)>;
 
 struct or_logicUncurry{
 
@@ -86,7 +86,7 @@ struct or_logicUncurry{
 
 };
 
-using or_logic = Curryfication<or_logicUncurry,bool(bool,bool)>;
+using or_logic = Currying<or_logicUncurry,bool(bool,bool)>;
 
 
 }
