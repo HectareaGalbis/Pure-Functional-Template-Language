@@ -7,5 +7,6 @@
 #include "list.h"
 #include "eq.h"
 #include "ord.h"
+#include "rational.h"
 
 #endif // PUREFUNCTIONAL_H_INCLUDED
