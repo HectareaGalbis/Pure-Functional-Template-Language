@@ -332,7 +332,7 @@ Output:
 Alguna variable vale false.
 ```
 
-> La expresión 'if constexpr' comprueba valores booleanos en tiempo de compilación, por lo que funciona muy bien con las metafunciones.
+> La expresión 'if constexpr' comprueba valores booleanos en tiempo de compilación, por lo que funciona muy bien con las metafunciones. En este caso, la función main anterior se deduce directamente a: int main() { std::cout << "Alguna variable vale false." << std::endl; return 0;}
 
 
 
