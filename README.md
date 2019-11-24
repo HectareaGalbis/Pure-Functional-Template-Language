@@ -334,11 +334,27 @@ Alguna variable vale false.
 
 > La expresión 'if constexpr' comprueba valores booleanos en tiempo de compilación, por lo que funciona muy bien con las metafunciones. En este caso, la función main anterior se deduce directamente a: int main() { std::cout << "Alguna variable vale false." << std::endl; return 0;}
 
+## La librería 'numeric.h'.
 
+La librería 'numeric' ofrece las operaciones básica de cálculo numérico con tipos de dato integral (int,char,...). Al igual que con los booleanos estas funciones son reproducibles con símbolos que nos ofrece C++, pero serán utiles para las listas. Las operaciones básicas más importantes que ofrece esta librería son:
 
-
-
-
+| 'numeric.h' | C++ |
+| :-----------: | :-----------: |
+| `plus` | + |
+| `minus` | - |
+| `mult` | * |
+| `div` | / |
+| `mod` | % |
+| `equal` | == |
+| `less` | < |
+| `greater` | > |
+| `lessEqual` | <= |
+| `graterEqual` | >= |
+| `and_bit` | & |
+| `or_bit` | \| |
+| `not_bit` | ~ |
+| mcm | |
+| mcd | |
 
 
 
