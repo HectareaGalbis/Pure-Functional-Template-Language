@@ -361,14 +361,34 @@ La librería 'numeric' ofrece las operaciones básica de cálculo numérico con 
 | `not_bit` | ~ |
 | `shift_left` | << |
 | `shift_right` | >> |
-| mcm | |
-| mcd | |
-| signum | |
-| abs | |
-| isqrt | |
+| `mcm` | |
+| `mcd` | |
+| `signum` | |
+| `abs` | |
+| `isqrt` | |
 
+```cpp
 
+static const var1 = 15;
+static const var2 = 28;
 
+using esUno = equal::let<1>;
+
+int main(){
+    
+    if constexpr (esUno::let<mcd::let<var1>::let<var2>>)
+        std::cout << "Los numeros " << var1 << " y " << var2 << " son comprimos. :)" << std::endl;
+    else
+        std::cout << "Los numeros " << var1 << " y " << var2 << " no son comprimos. :(" << std::endl;
+
+}
+
+```
+
+```
+Output:
+Los numeros 15 y 28 son coprimos. :)
+```
 
 
 
