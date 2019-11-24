@@ -301,4 +301,53 @@ Output:
 55
 ```
 
+## La librería 'bool.h'.
+
+Esta librería contiene un conjunto de funciones básicas (not, and, or) para el manejo de valores booleanos. Como ya existen las palabras reservadas not, and y or en C++ se usan not_logic, and_logic y or_logic.
+
+> A primera vista pueden parecer funciones prescindibles, pues ya tenemos símbolos que nos da C++ para estas operaciones. Sin embargo éstas serán útiles cuando veamos la clase List.
+
+```cpp
+
+static const bool var1 = true;
+static const bool var2 = false;
+
+int main(){
+
+    if constexpr (and_logic::let<var1>::let<var2>){                 // <-- Ejemplo muy tonto, ya que podemos usar 'var1 && var2'.
+        std::cout << "Las dos variables valen true." << std::endl;
+    }
+    else {
+        std::cout << "Alguna variable vale false." << std::endl;
+    }
+    
+    return 0;
+
+}
+
+```
+
+```
+Output:
+Alguna variable vale false.
+```
+
+> La expresión 'if constexpr' comprueba valores booleanos en tiempo de compilación, por lo que funciona muy bien con las metafunciones.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
