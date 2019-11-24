@@ -349,12 +349,17 @@ La librería 'numeric' ofrece las operaciones básica de cálculo numérico con 
 | `less` | < |
 | `greater` | > |
 | `lessEqual` | <= |
-| `graterEqual` | >= |
+| `greaterEqual` | >= |
 | `and_bit` | & |
 | `or_bit` | \| |
 | `not_bit` | ~ |
+| `shift_left` | << |
+| `shift_right` | >> |
 | mcm | |
 | mcd | |
+| signum | |
+| abs | |
+| isqrt | |
 
 
 
