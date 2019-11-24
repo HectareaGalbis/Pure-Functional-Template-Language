@@ -15,9 +15,9 @@ Los [templates](https://en.wikipedia.org/wiki/Template_(C%2B%2B)) son una herram
 * Cómo definir métodos en las clases.
 * Cómo crear funciones "polimórficas".
 * Clase Ratio (Números racionales).
-* Clase List (Listas de literales).
+* Clase List (Listas de elementos de tipo integral (int,char,enum,...).
 * Clase Tuple (Listas de tipos de datos o clases).
-* Clase Num/Lit (Encapsulación de literales en un tipo de dato para usarlos en tuplas).
+* Clase Int (Integral) (Encapsulación de elementos de tipo integral en un tipo de dato para usarlos en tuplas).
 
 ## Instalación y requisitos
 
@@ -54,25 +54,25 @@ Ahora los parámetros se pasan tarde. ¿Qué consecuencias tiene esto? Nuestra f
 
 ```cpp
 
-struct Sucesor{             // <-- Función que recibe un entero devuelve su sucesor.
+struct sucesor{             // <-- Función que recibe un entero devuelve su sucesor.
     template<int k>     
     static const int value = k+1;
 }
 
-struct Cuadrado{            // <-- Función que recibe un entero y devuelve su cuadrado.
+struct cuadrado{            // <-- Función que recibe un entero y devuelve su cuadrado.
     template<int k>
     static const int value = k*k;   
 }
 
 
-struct Comp{                // <-- Función que recibe dos funciones y un entero resultado de F(G(k)).
+struct comp{                // <-- Función que recibe dos funciones y un entero y devuelve F(G(k)).
     template<class F, class G, int k>
     static const int value = F::template value<G::template value<k>>;
 }
 
 int main(){
 
-    std::cout << Comp::value<Cuandrado,Sucesor,5> << std::endl;
+    std::cout << comp::value<cuandrado,sucesor,5> << std::endl;
 
 }
 
@@ -83,7 +83,7 @@ Output:
 36
 ```
 
-Primero se ejecuta Sucesor::value<5> = 6, y despues se ejecuta Cuadrado::value<6> = 36.
+Primero se ejecuta sucesor::value<5> = 6, y despues se ejecuta cuadrado::value<6> = 36.
 
 ## Funciones curryficadas
 
@@ -93,7 +93,7 @@ Se dice que una función está curryficada cuando puede tomar sus parámetros de
 
 ```cpp
 
-struct Max{         // <-- Funcion curryficada que devuelve el máximo de dos enteros.
+struct max{         // <-- Funcion curryficada que devuelve el máximo de dos enteros.
     template<int m>
     struct let{
         template<int n>
@@ -101,15 +101,15 @@ struct Max{         // <-- Funcion curryficada que devuelve el máximo de dos en
     }
 }
 
-using Max5 = Max::let<5>;   // <-- Pasando un parámetro a Max, recibimos una nueva función.
+using max5 = max::let<5>;   // <-- Pasando un parámetro a Max, recibimos una nueva función.
 
 int main(){
 
     static const n = 7;
     static const k = 3;
 
-    std::cout << "El máximo entre 5 y " << n << " es: " << Max5::let<n> << std::endl;
-    std::cout << "El máximo entre 5 y " << k << " es: " << Max5::let<k> << std::endl;
+    std::cout << "El máximo entre 5 y " << n << " es: " << max5::let<n> << std::endl;
+    std::cout << "El máximo entre 5 y " << k << " es: " << max5::let<k> << std::endl;
 
 }
 
@@ -125,11 +125,11 @@ El máximo entre 5 y 3 es: 5
 
 ## Curryficación de funciones no curryficadas
 
-La función Max anterior recibía dos parámetros pero, ¿y si queremos una función curryficada con 5 parámetros? Uno ya puede ver que tendríamos unos cuantos structs anidados. 
+La función max anterior recibía dos parámetros pero, ¿y si queremos una función curryficada con 5 parámetros? Uno ya puede ver que tendríamos unos cuantos structs anidados. 
 
 ```cpp
 
-struct MegaFunc{
+struct megaFunc{
     template<class Var1>
     struct let{
         template<class Var2>
@@ -148,41 +148,41 @@ struct MegaFunc{
 
 ```
 
-Esto no es viable (y duele verlo). En el fichero 'curry.h' se encuentra la clase Curryfication, que nos permite curryficar una función no curryficada, pasándole como parámetros la función no curryficada y una descripción de la función. Con un ejemplo se verá más claro.
+Esto no es viable (y duele verlo). En el fichero 'curry.h' se encuentra la clase Currying, que nos permite curryficar una función no curryficada, pasándole como parámetros la función no curryficada y una descripción de la función. Con un ejemplo se verá más claro.
 
 ```cpp
 
-struct MegaFuncUncurry{                           // <-- Función no curryficada
+struct megaFuncUncurry{                           // <-- Función no curryficada
     template<class Var1, class Var2, class Var2, class Var3, class Var4, class Var5>
     using value = //...                           // <-- Es necesario que la palabra sea 'value'.
 }
              Función no curryficada         Descripción de la función
              ----------------------vvvvvv   -----------------vvvvvv
-using MegaFunc = Curryfication<MegaFuncUncurry,Type(Type,Type,Type,Type,Type)>;
+using megaFunc = Currying<megaFuncUncurry,Type(Type,Type,Type,Type,Type)>;
 
 ```
 
-**Type** es una clase de uso especial para Curryfication. Sirve para indicar que el tipo de parámetro o de retorno es una clase. En este caso MegaFunc es una función que recibe 5 clases y devuelve una clase. Veamos otro ejemplo en el que curryficamos la función std::conditional.
+**Type** es una clase de uso especial para Currying. Sirve para indicar que el tipo de parámetro o de retorno es una clase. En este caso megaFunc es una función que recibe 5 clases y devuelve una clase. Veamos otro ejemplo en el que curryficamos la función std::conditional.
 
 ```cpp
 
-struct CondUncurry{
+struct condUncurry{
     template<bool b,class X, class Y>
     using value = typename std::conditional<b,X,Y>::type;
 }
 
-using Cond = Curryfication<CondUncurry,Type(bool,Type,Type)>;
+using cond = Currying<condUncurry,Type(bool,Type,Type)>;
 
 ```
 
-En este caso la función 'Cond' recibe un booleano, dos clases y, devuelve otra clase. 
+En este caso la función 'cond' recibe un booleano, dos clases y, devuelve otra clase. 
 
 ```cpp
 
 int main(){
 
-    Cond::let<true>::let<int>::let<float> varInt = 3.5;
-    Cond::let<false>::let<int>::let<float> varFloat = 3.5;
+    cond::let<true>::let<int>::let<float> varInt = 3.5;
+    cond::let<false>::let<int>::let<float> varFloat = 3.5;
     
     std::cout << "varInt tiene valor: " << varInt << std::endl;
     std::cout << "varFloat tiene valor: " << varFloat << std::endl;
@@ -197,7 +197,7 @@ varInt tiene valor: 3
 varFloat tiene valor: 3.5
 ```
 
-Aunque no es *Curry* todo lo que reluce :D . Curryfication tiene algunas limitaciones impuestas por cómo funcionan los templates de C++: Una función no curryficada debe tener los **parámetros non-type a la izquierda** y **los parámetros type a la derecha**. Pero que no cunda el pánico, podemos arreglar esto en la descripción de la función que le pasamos a Curryfication.
+Aunque no es *Curry* todo lo que reluce :D . Currying tiene algunas limitaciones impuestas por cómo funcionan los templates de C++: Una función no curryficada debe tener los **parámetros non-type a la izquierda** y **los parámetros type a la derecha**. Pero que no cunda el pánico, podemos arreglar esto en la descripción de la función que le pasamos a Curryfication.
 
 ```cpp
 
@@ -207,7 +207,7 @@ struct myFunctionUncurry{                       // <-- No podremos curryficar la
 }
 
 //Compilará, pero no podremos llegar a pasarle todos los parámetros.
-using myFunction = Curryfication<myFunctionUncurry,bool(Type,int,Type,int)>;    
+using myFunction = Currying<myFunctionUncurry,bool(Type,int,Type,int)>;    
 
 ```
 
@@ -219,7 +219,7 @@ struct myFunctionUncurry{                       // <-- Sí podremos curryficar l
 }
 
 //En la descripción ordenamos los parámetros como queramos.
-using myFunction = Curryfication<myFunctionUncurry,bool(Type,int,Type,int)>;  // <-- Correcto, leerá en este orden: (X,k,Y,l).
+using myFunction = Currying<myFunctionUncurry,bool(Type,int,Type,int)>;  // <-- Correcto, leerá en este orden: (X,k,Y,l).
 
 ```
 
@@ -246,7 +246,7 @@ struct myFunctionUncurry{
     static const bool value = //...
 }
 
-using myFunction = Curryfication<myFunctionUncurry,bool(Type,char,int,Type)>;
+using myFunction = Currying<myFunctionUncurry,bool(Type,char,int,Type)>;
 
 ```
 
@@ -256,10 +256,10 @@ Como en cualquier introducción a la recursividad vamos a definir la función Fi
 
 ```cpp
 
-struct Fibo{
+struct fibo{
 
     template<int n>
-    static const int let = n==0 ? 0 : (n==1 ? 1 : Fibo::let<n-2>+Fibo::let<n-1>);
+    static const int let = n==0 ? 0 : (n==1 ? 1 : fibo::let<n-2>+fibo::let<n-1>);
 
 }
 
@@ -270,29 +270,29 @@ Si n es 0, retornamos 0. Si n es 1, retornamos 1. Y si n es otro número, retorn
 ```cpp
 
 template<int n>
-struct FiboAux{                 // <-- Función general recursiva
+struct fiboAux{                 // <-- Función general recursiva
     static const int value = FiboAux<n-2>::value + FiboAux<n-1>::value;
 };
 
 template<>
-struct FiboAux<0>{              // <-- Especialización para n==0
+struct fiboAux<0>{              // <-- Especialización para n==0
     static const int value = 0;
 };
 
 template<>
-struct FiboAux<1>{              // <-- Especialización para n==1
+struct fiboAux<1>{              // <-- Especialización para n==1
     static const int value = 1;
 };
 
-struct Fibo{
+struct fibo{
     template<int n>
-    static const int let = FiboAux<n>::value;       // <-- Llamada a la función auxiliar
+    static const int let = fiboAux<n>::value;       // <-- Llamada a la función auxiliar
 };
 
 
 int main(){
 
-    std::cout << Fibo::let<10> << std::endl;
+    std::cout << fibo::let<10> << std::endl;
 
     return 0;
 }
