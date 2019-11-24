@@ -369,8 +369,8 @@ La librería 'numeric' ofrece las operaciones básicas de cálculo numérico con
 
 ```cpp
 
-static const var1 = 15;
-static const var2 = 28;
+static const unsigned int var1 = 15;
+static const unsigned int var2 = 28;
 
 using esUno = equal::let<1>;
 
