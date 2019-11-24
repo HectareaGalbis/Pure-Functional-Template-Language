@@ -22,7 +22,7 @@ Los [templates](https://en.wikipedia.org/wiki/Template_(C%2B%2B)) son una herram
 ## Instalación y requisitos
 
 * La librería consta de ficheros header (.h), por tanto lo único necesario es importarlas a tu proyecto. Todos los elementos de la librería están bajo el namespace pftl. 
-* Se requiere como mínimo C++14.
+* Se requiere como mínimo C++17.
 
 ## Empezando
 
@@ -342,7 +342,7 @@ Alguna variable vale false.
 
 ## La librería 'numeric.h'.
 
-La librería 'numeric' ofrece las operaciones básica de cálculo numérico con tipos de dato integral (int,char,...). Al igual que con los booleanos estas funciones son reproducibles con símbolos que nos ofrece C++, pero serán utiles para las listas. Las operaciones básicas más importantes que ofrece esta librería son:
+La librería 'numeric' ofrece las operaciones básicas de cálculo numérico con tipos de dato integral (int,char,...). Al igual que con los booleanos estas funciones son reproducibles con símbolos que nos ofrece C++, pero serán utiles para las listas. Las operaciones básicas más importantes que ofrece esta librería son:
 
 | 'numeric.h' | C++ |
 | :-----------: | :-----------: |
