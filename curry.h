@@ -13,7 +13,7 @@ template<class S>
 struct ArgLit{
     template<S k>
     struct Arg{
-        static const S value = k;
+        constexpr static const S value = k;
     };
 };
 
@@ -100,6 +100,14 @@ struct enable_if_int<true,Ret,x>{
 };
 
 
+template<class S>
+struct is_nontype{
+    static const bool value = std::is_integral<S>::value || std::is_enum<S>::value ||
+                              std::is_pointer<S>::value || //std::is_lvalue_reference<S>::value ||
+                              std::is_null_pointer<S>::value;
+};
+
+
 template<class F, class In, class Ty>
 struct RetType{};
 
@@ -125,7 +133,7 @@ template<class F, class Ret, class Next, class Next2, class... Args, class... In
 struct CurryInt<F,true,Ret(Next,Next2,Args...),void(InArgs...),void(TyArgs...)>{
     struct value{
         template<Next x>
-        using let = typename CurryInt<F,std::is_integral<Next2>::value,Ret(Next2,Args...),void(InArgs...,typename ArgLit<Next>::template Arg<x>),void(TyArgs...)>::value;
+        using let = typename CurryInt<F,is_nontype<Next2>::value,Ret(Next2,Args...),void(InArgs...,typename ArgLit<Next>::template Arg<x>),void(TyArgs...)>::value;
     };
 };
 
@@ -133,7 +141,7 @@ template<class F, class Ret, class Next, class Next2, class... Args, class... In
 struct CurryInt<F,false,Ret(Next,Next2,Args...),void(InArgs...),void(TyArgs...)>{
     struct value{
         template<class x>
-        using let = typename std::enable_if<std::is_base_of<Next,x>::value,typename CurryInt<F,std::is_integral<Next2>::value,Ret(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value>::type;
+        using let = typename std::enable_if<std::is_base_of<Next,x>::value,typename CurryInt<F,is_nontype<Next2>::value,Ret(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value>::type;
     };
 };
 
@@ -141,7 +149,7 @@ template<class F, class Ret, class Next2, class... Args, class... InArgs, class.
 struct CurryInt<F,false,Ret(Type,Next2,Args...),void(InArgs...),void(TyArgs...)>{
     struct value{
         template<class x>
-        using let = typename CurryInt<F,std::is_integral<Next2>::value,Ret(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value;
+        using let = typename CurryInt<F,is_nontype<Next2>::value,Ret(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value;
     };
 };
 
@@ -177,7 +185,7 @@ template<class F, class Next, class Next2, class... Args, class... InArgs, class
 struct CurryType<F,true,Type(Next,Next2,Args...),void(InArgs...),void(TyArgs...)>{
     struct value{
         template<Next x>
-        using let = typename CurryType<F,std::is_integral<Next2>::value,Type(Next2,Args...),void(InArgs...,typename ArgLit<Next>::template Arg<x>),void(TyArgs...)>::value;
+        using let = typename CurryType<F,is_nontype<Next2>::value,Type(Next2,Args...),void(InArgs...,typename ArgLit<Next>::template Arg<x>),void(TyArgs...)>::value;
     };
 };
 
@@ -185,7 +193,7 @@ template<class F, class Next, class Next2, class... Args, class... InArgs, class
 struct CurryType<F,false,Type(Next,Next2,Args...),void(InArgs...),void(TyArgs...)>{
     struct value{
         template<class x>
-        using let = typename std::enable_if<std::is_base_of<Next,x>::value,typename CurryType<F,std::is_integral<Next2>::value,Type(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value>::type;
+        using let = typename std::enable_if<std::is_base_of<Next,x>::value,typename CurryType<F,is_nontype<Next2>::value,Type(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value>::type;
     };
 };
 
@@ -193,7 +201,7 @@ template<class F, class Next2, class... Args, class... InArgs, class... TyArgs>
 struct CurryType<F,false,Type(Type,Next2,Args...),void(InArgs...),void(TyArgs...)>{
     struct value{
         template<class x>
-        using let = typename CurryType<F,std::is_integral<Next2>::value,Type(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value;
+        using let = typename CurryType<F,is_nontype<Next2>::value,Type(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value;
     };
 };
 
@@ -227,12 +235,12 @@ struct CurryingAux2{};
 
 template<class F, class Ret, class Next, class... Args>
 struct CurryingAux2<F,true,Ret(Next,Args...)>{
-    using value = typename CurryInt<F,std::is_integral<Next>::value,Ret(Next,Args...),void(),void()>::value;
+    using value = typename CurryInt<F,is_nontype<Next>::value,Ret(Next,Args...),void(),void()>::value;
 };
 
 template<class F, class Next, class... Args>
 struct CurryingAux2<F,false,Type(Next,Args...)>{
-    using value = typename CurryType<F,std::is_integral<Next>::value,Type(Next,Args...),void(),void()>::value;
+    using value = typename CurryType<F,is_nontype<Next>::value,Type(Next,Args...),void(),void()>::value;
 };
 
 
@@ -241,7 +249,7 @@ struct CurryingAux{};
 
 template<class F, class Ret, class... Args>
 struct CurryingAux<F,Ret(Args...)>{
-    using value = typename CurryingAux2<F,std::is_integral<Ret>::value,Ret(Args...)>::value;
+    using value = typename CurryingAux2<F,is_nontype<Ret>::value,Ret(Args...)>::value;
 };
 
 template<class F, class T>
@@ -272,40 +280,35 @@ struct If{
 ///Metafuncion con lazy-parameters.
 
 ///Ejemplo1
-struct TrueExampleUncurry{
+struct TrueExample : public Currying<TrueExample,Type(Type,Type)>{
     template<class X, class Y>
     using value = X;
 };
 
-using TrueExample = Currying<TrueExampleUncurry,Type(Type,Type)>;
 
 
 
 ///Ejemplo2
-struct ConditionalExampleUncurry{
+struct ConditionalExample : public Currying<ConditionalExample,Type(bool,Type,Type)>{
     template<bool b, class X, class Y>
     using value = typename If<b>::template Then<X>::template Else<Y>;
 };
 
-using ConditionalExample = Currying<ConditionalExampleUncurry,Type(bool,Type,Type)>;
-
 
 
 ///Ejemplo3 (Un único argumento)
-struct IsPairExample{
+struct IsEvenExample : public Currying<IsEvenExample,bool(int)>{
     template<int n>
-    static const bool let = (n%2 == 0);
+    static const bool value = (n%2 == 0);
 };
 
 
 
 ///Ejemplo4 (Alteracion del orden de los argumentos) (En la definicion: non-types a la izquierda y types a la derecha)
-struct LeftOrRightExampleUncurry{
+struct LeftOrRightExample : Currying<LeftOrRightExample,Type(Type,int,Type)>{
     template<int k, class X, class Y>
     using value = typename If<(k<0)>::template Then<X>::template Else<Y>;
 };
-
-using LeftOrRightExample = Currying<LeftOrRightExampleUncurry,Type(Type,int,Type)>;  ///Se pide primero un type, luego un int, y luego otro type.
 
 
 

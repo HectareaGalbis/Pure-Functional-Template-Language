@@ -9,245 +9,146 @@ namespace pftl{
 
 
 template<class S>
-struct plus_gUncurry{
-
+struct plus_g : public Currying<plus_g<S>,S(S,S)>{
     template<S m, S n>
     static const S value = m+n;
-
 };
-
-template<class S>
-using plus_g = Currying<plus_gUncurry<S>,S(S,S)>;
-
 using plus = plus_g<DEF_TYPE>;
 
 
 template<class S>
-struct minus_gUncurry{
-
+struct minus_g : public Currying<minus_g<S>,S(S,S)>{
     template<S m, S n>
     static const S value = m-n;
-
 };
-
-template<class S>
-using minus_g = Currying<minus_gUncurry<S>,S(S,S)>;
-
 using minus = minus_g<DEF_TYPE>;
 
 
 template<class S>
-struct mult_gUncurry{
-
+struct mult_g : public Currying<mult_g<S>,S(S,S)>{
     template<S m, S n>
     static const S value = m*n;
-
 };
-
-template<class S>
-using mult_g = Currying<mult_gUncurry<S>,S(S,S)>;
-
 using mult = mult_g<DEF_TYPE>;
 
 
 template<class S>
-struct div_gUncurry{
-
+struct div_g : public Currying<div_g<S>,S(S,S)>{
     template<S m, S n>
     static const S value = m/n;
-
 };
-
-template<class S>
-using div_g = Currying<div_gUncurry<S>,S(S,S)>;
-
 using div = div_g<DEF_TYPE>;
 
 
 template<class S>
-struct mod_gUncurry{
-
+struct mod_g : public Currying<mod_g<S>,S(S,S)>{
     template<S m, S n>
     static const S value = m%n;
-
 };
-
-template<class S>
-using mod_g = Currying<mod_gUncurry<S>,S(S,S)>;
-
 using mod = mod_g<DEF_TYPE>;
 
 
 template<class S>
-struct equal_gUncurry{
-
+struct equal_g : public Currying<equal_g<S>,bool(S,S)>{
     template<S m, S n>
     static const bool value = m==n;
-
 };
-
-template<class S>
-using equal_g = Currying<equal_gUncurry<S>,bool(S,S)>;
-
 using equal = equal_g<DEF_TYPE>;
 
 
 template<class S>
-struct greater_gUncurry{
-
+struct greater_g : public Currying<greater_g<S>,bool(S,S)>{
     template<S m, S n>
     static const bool value = m>n;
-
 };
-
-template<class S>
-using greater_g = Currying<greater_gUncurry<S>,bool(S,S)>;
-
 using greater = greater_g<DEF_TYPE>;
 
 
 template<class S>
-struct less_gUncurry{
-
+struct less_g : public Currying<less_g<S>,bool(S,S)>{
     template<S m, S n>
     static const bool value = m<n;
-
 };
-
-template<class S>
-using less_g = Currying<less_gUncurry<S>,bool(S,S)>;
-
 using less = less_g<DEF_TYPE>;
 
 
 template<class S>
-struct greaterEqual_gUncurry{
-
+struct greaterEqual_g : public Currying<greaterEqual_g<S>,bool(S,S)>{
     template<S m, S n>
     static const bool value = m>=n;
-
 };
-
-template<class S>
-using greaterEqual_g = Currying<greaterEqual_gUncurry<S>,bool(S,S)>;
-
 using greaterEqual = greaterEqual_g<DEF_TYPE>;
 
 
 template<class S>
-struct lessEqual_gUncurry{
-
+struct lessEqual_g : public Currying<lessEqual_g<S>,bool(S,S)>{
     template<S m, S n>
     static const bool value = m<=n;
-
 };
-
-template<class S>
-using lessEqual_g = Currying<lessEqual_gUncurry<S>,bool(S,S)>;
-
 using lessEqual = lessEqual_g<DEF_TYPE>;
 
 
 template<class S>
-struct suc_g{
-
+struct suc_g : public Currying<suc_g<S>,S(S)>{
     template<S n>
-    static const S let = n+1;
-
+    static const S value = n+1;
 };
-
 using suc = suc_g<DEF_TYPE>;
 
 
 template<class S>
 struct pre_g{
-
     template<S n>
     static const S let = n-1;
-
 };
-
 using pre = pre_g<DEF_TYPE>;
 
 
 template<class S>
-struct not_bit_g{
-
+struct not_bit_g : public Currying<not_bit_g<S>,S(S)>{
     template<S n>
-    static const S let = ~n;
-
+    static const S value = ~n;
 };
-
 using not_bit = not_bit_g<DEF_TYPE>;
 
 
 template<class S>
-struct and_bit_gUncurry{
-
+struct and_bit_g : public Currying<and_bit_g<S>,S(S,S)>{
     template<S m, S n>
     static const S value = m&n;
-
 };
-
-template<class S>
-using and_bit_g = Currying<and_bit_gUncurry<S>,S(S,S)>;
-
 using and_bit = and_bit_g<DEF_TYPE>;
 
 
 template<class S>
-struct or_bit_gUncurry{
-
+struct or_bit_g : public Currying<or_bit_g<S>,S(S,S)>{
     template<S m, S n>
     static const S value = m|n;
-
 };
-
-template<class S>
-using or_bit_g = Currying<or_bit_gUncurry<S>,S(S,S)>;
-
 using or_bit = or_bit_g<DEF_TYPE>;
 
 
 template<class S>
-struct xor_bit_gUncurry{
-
+struct xor_bit_g : public Currying<xor_bit_g<S>,S(S,S)>{
     template<S m, S n>
     static const S value = m^n;
-
 };
-
-template<class S>
-using xor_bit_g = Currying<xor_bit_gUncurry<S>,S(S,S)>;
-
 using xor_bit = xor_bit_g<DEF_TYPE>;
 
 
 template<class S>
-struct shift_left_gUncurry{
-
+struct shift_left_g : public Currying<shift_left_g<S>,S(S,S)>{
     template<S m, S n>
     static const S value = m << n;
-
 };
-
-template<class S>
-using shift_left_g = Currying<shift_left_gUncurry<S>,S(S,S)>;
-
 using shift_left = shift_left_g<DEF_TYPE>;
 
 
 template<class S>
-struct shift_right_gUncurry{
-
+struct shift_right_g : public Currying<shift_right_g<S>,S(S,S)>{
     template<S m, S n>
     static const S value = m >> n;
-
 };
-
-template<class S>
-using shift_right_g = Currying<shift_right_gUncurry<S>,S(S,S)>;
-
 using shift_right = shift_right_g<DEF_TYPE>;
 
 
@@ -262,52 +163,34 @@ struct mcd_gAux<S,true,m,n>{
 };
 
 template<class S>
-struct mcd_gUncurry{
-
+struct mcd_g : public Currying<mcd_g<S>,S(S,S)>{
     template<S m, S n>
     static const S value = mcd_gAux<S,n==0,m,n>::value;
-
 };
-
-template<class S>
-using mcd_g = Currying<mcd_gUncurry<S>,S(S,S)>;
-
 using mcd = mcd_g<DEF_TYPE>;
 
 
 template<class S>
-struct mcm_gUncurry{
-
+struct mcm_g : Currying<mcm_g<S>,S(S,S)>{
     template<S m, S n>
     static const S value = (m*n) / mcd_g<S>::template let<m>::template let<n>;
-
 };
-
-template<class S>
-using mcm_g = Currying<mcm_gUncurry<S>,S(S,S)>;
-
 using mcm = mcm_g<DEF_TYPE>;
 
 
 template<class S>
-struct signum_g{
-
+struct signum_g : public Currying<signum_g<S>,int(S)>{
     template<S n>
-    static const int let = n>0 ? 1 : (n==0 ? 0 : -1);
-
+    static const int value = n>0 ? 1 : (n==0 ? 0 : -1);
 };
-
 using signum = signum_g<DEF_TYPE>;
 
 
 template<class S>
-struct abs_g{
-
+struct abs_g : Currying<abs_g<S>,S(S)>{
     template<S n>
-    static const S let = n>=0 ? n : -n;
-
+    static const S value = n>=0 ? n : -n;
 };
-
 using abs = abs_g<DEF_TYPE>;
 
 
@@ -382,74 +265,6 @@ struct nextPrime : Currying<nextPrime,uintmax_t(uintmax_t)>{
     template<uintmax_t n>
     static const uintmax_t value = nextPrimeAux<isPrime::let<n+1>,n+1>::value;
 };
-
-
-//template<class S>
-//struct isDivisor_gUncurry{
-//
-//    template<S m, S n>
-//    static const bool value = m<n ? equal<S>::template let<mod<S>::template let<n>::template let<m>> :: template let<0> : false;
-//
-//    template<class... Args>
-//    using let = curry<IsDivisor::_gUncurry,2,Args...>;
-//
-//};
-//
-//template<class P, class N>
-//struct IsPrimeAux{
-//
-//    using value = Or::uncurry<IsDivisor::uncurry<N,P>, typename IsPrimeAux<P,I<N::value-1>>::value>;
-//
-//};
-//
-//template<class P>
-//struct IsPrimeAux<P,I<1>>{
-//
-//    using value = False;
-//
-//};
-//
-//struct IsPrime{
-//
-//    template<class N>
-//    using uncurry = Not::let<typename IsPrimeAux<N,Pre::let<N>>::value>;
-//
-//    template<class... Args>
-//    using let = curry<IsPrime::uncurry,1,Args...>;
-//
-//};
-//
-//
-//template<class N>
-//struct FiboAux{
-//
-//    using value = typename Plus::let< typename FiboAux<Pre::let<N>>::value >:: template let< typename FiboAux<Pre::let<Pre::let<N>>>::value >;
-//
-//};
-//
-//template<>
-//struct FiboAux<I<0>>{
-//
-//    using value = I<0>;
-//
-//};
-//
-//template<>
-//struct FiboAux<I<1>>{
-//
-//    using value = I<1>;
-//
-//};
-//
-//struct Fibo{
-//
-//    template<class N>
-//    using uncurry = typename FiboAux<N>::value;
-//
-//    template<class... Args>
-//    using let = curry<Fibo::uncurry, 1, Args...>;
-//
-//};
 
 
 }
