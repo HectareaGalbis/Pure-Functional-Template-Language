@@ -524,6 +524,7 @@ El circulo de radio 5 tiene un area aproximada de 75 unidades
 El rectangulo de medidas 3x2 tiene un area de 6 unidades
 ```
 
+## Un inciso sobre la clase Currying
 
 
 
