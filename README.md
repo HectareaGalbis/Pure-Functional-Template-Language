@@ -444,8 +444,85 @@ Errores de compilación:
 
 ## Clases, instancias y métodos
 
+A partir de ahora nos metemos en el terreno de los datos 'type'. Poco a poco iremos definiendo tipos de datos básicos que nos permitirán hacer cálculos como si de otro lenguaje de programación se tratara. Hay que pensar que esto no está nada relacionado con los tipos de dato 'non-type', aunque podremos pasar de un lado a otro con los tipos más básicos (int, char, bool,...).
+
+### Clases e instancias
+
+Una clase viene a representar un tipo de dato y para crear una instancia de dicha clase usaremos un constructor. En la práctica una clase será una estructura de C++. 
+
+```cpp
+struct Figura{};         // <-- Clase Figura
+```
+
+Y los constructores son estructuras template que son hijas de la clase.
+
+```cpp
+template<int radio>
+struct Circulo : public Figura{};       // <-- Constructor de una Figura con un argumento.
+
+template<int alto, int ancho>
+struct Rectangulo : public Figura{};    // <-- Constructor de una Figura con dos argumentos.
+```
+
+Dados estos constructores podemos crear instancias.
+
+```cpp
+using miCirculo = Circulo<5>;           // <-- Instancia de una Figura.
+```
+
+> Seguiré una norma para distinguir funciones de clases. Las funciones empiezan por minúscula mientras que las clases empiezan por mayúscula.
+
+### Métodos de una clase
+
+Los métodos son metafunciones que definen las clases y que cada constructor debe implementar. De esta forma conseguiremos 'polimorfismo' con funciones que manejen estos tipos de datos.
+
+```cpp
+struct Figura{
+    static const int area = 0;          // <-- Definición del método area que devolvera el area de una figura. 
+};
 
 
+template<int radio>
+struct Circulo : public Figura{
+    static const int area = 3*radio*radio;          // <-- Implementación del método area.
+};       
+
+template<int alto, int ancho>
+struct Rectangulo : public Figura{
+    static const int area = alto*ancho;             // <-- Implementación del método area.
+};
+```
+
+Para terminar necesitamos crear una función que llame al método area, que por conveniencia la llamaré igual que el método.
+
+```cpp
+struct area : public Currying<area,int(Figura)>{        // <-- Función que recibe un argumento de tipo Figura!
+    template<class F>
+    static const int value = F::area;
+};
+
+
+const int r = 5;
+using circulo = Circulo<r>;
+
+const int ancho = 2;
+const int alto = 3;
+using rectangulo = Rectangulo<alto,ancho>;
+
+int main(){
+
+    std::cout << "El circulo de radio " << r << " tiene un area aproximada de " << area::let<circulo> << " unidades" << std::endl;
+    std::cout << "El rectangulo de medidas " << alto << "x" << ancho << " tiene un area de " << area::let<rectangulo> << " unidades" << std::endl;
+
+    return 0;
+
+}
+```
+```
+Output:
+El circulo de radio 5 tiene un area aproximada de 75 unidades
+El rectangulo de medidas 3x2 tiene un area de 6 unidades
+```
 
 
 
