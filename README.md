@@ -15,7 +15,7 @@ Los [templates](https://en.wikipedia.org/wiki/Template_(C%2B%2B)) son una herram
 * Cómo definir métodos en las clases.
 * Cómo crear funciones "polimórficas".
 * Clase Ratio (Números racionales).
-* Clase List (Listas de elementos de tipo integral (int,char,enum,...).
+* Clase List (Listas de elementos de tipo integral (int,char,enum,...)).
 * Clase Tuple (Listas de tipos de datos o clases).
 * Clase Int (Integral) (Encapsulación de elementos de tipo integral en un tipo de dato para usarlos en tuplas).
 
@@ -300,6 +300,10 @@ int main(){
 Output:
 55
 ```
+
+## Distinción entre los parámetros 'non-type' y los parámetros 'type'.
+
+C++ hace una distinción muy clara entre estos dos tipos de parámetros, lo que hace que este proyecto haga lo mismo. En primer lugar tendremos un conjunto de funciones para el manejo de datos 'non-type' y por otro lado otro conjunto para el manejo de datos 'type'. Además tendremos un par de funciones que harán de nexo entre estos dos conjuntos. Empezamos viendo la parte 'non-type'.
 
 ## La librería 'bool.h'.
 
