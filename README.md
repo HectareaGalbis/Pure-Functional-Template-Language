@@ -414,6 +414,36 @@ Algunas funciones básicas son las siguientes:
 | `concat` | Concatena dos vectores |
 | `map` | Ejecuta una función para cada elemento del vector |
 | `filter` | Elimina los elementos del vector que devuelven true tras aplicarles una función |
+| `reverse` | Invierte el orden de los elementos del vector |
+
+> Podemos forzar un error de compilación para comprobar los tipos de datos deducidos por estas funciones. Usare una clase vacía llamada Display.
+
+```cpp
+template<class S>
+struct Display{};       // <-- Clase vacía que usaremos para forzar un error de compilación.
+
+using helloWorld = Vector<'H','e','l','l','o',',',' ','w','o','r','l','d','!'>;
+
+Display<helloWorld>::value;    // <-- Error forzado.
+
+using esEle = equal::let<'l'>;                          // <-- Función que comprueba si un caracter es la letra 'l'.
+using miVector = filter::let<esEle>::let<helloWorld>;   // <-- Elimina las letras 'l' del vector. 
+
+Display<miVector>::value;   // <-- Error forzado.
+
+int main(){
+    return 0;
+}
+
+```
+```
+Errores de compilación:
+'value' in 'struct Display<pftl::Vector<'H', 'e', 'l', 'l', 'o', ',', ' ', 'w', 'o', 'r', 'l', 'd', '!'> >' does not name a type
+'value' in 'struct Display<pftl::Vector<'H', 'e', 'o', ',', ' ', 'w', 'o', 'r', 'd', '!'> >' does not name a type
+```
+
+
+
 
 
 
