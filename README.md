@@ -442,7 +442,7 @@ Errores de compilación:
 'value' in 'struct Display<pftl::Vector<'H', 'e', 'o', ',', ' ', 'w', 'o', 'r', 'd', '!'> >' does not name a type
 ```
 
-
+## Clases, instancias y métodos
 
 
 
