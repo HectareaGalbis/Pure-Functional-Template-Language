@@ -394,14 +394,26 @@ Output:
 Los numeros 15 y 28 son coprimos. :)
 ```
 
-## La clase Vector
+## La clase Vector (vector.h)
 
-Aún no hemos definido las clases, pero me parece más adecuado dejarlo para la parte 'type' que vendrá posteriormente. Esta clase nos permite almacenar un número variable de parámetros 'non-type' del mismo tipo y contiene algunas funciones para manejarlas.
+Aún no hemos definido las clases, pero me parece más adecuado dejarlo para la parte 'type' que vendrá posteriormente. Esta clase nos permite almacenar un número variable de parámetros 'non-type' **del mismo tipo** y contiene algunas funciones para manejarlas.
 
 ```cpp
-using miVector = Vector<4,-10,14,5,-4,12>;   // <-- Vector de enteros.
-using miString = Vector<'H','e','l','l','o',',',' ','w','o','r','l','d','!'>;  // <-- Vector de caracteres.
+using miVector = Vector<4,-10,14,5,-4,12>;                                      // <-- Vector de enteros.
+using miString = Vector<'H','e','l','l','o',',',' ','w','o','r','l','d','!'>;   // <-- Vector de caracteres.
 ```
+
+> Vector permite usar cualquier tipo de parámetro 'non-type', pero todos los elementos tienen que ser del mismo tipo.
+
+Algunas funciones básicas son las siguientes:
+
+| Vector | Qué hace |
+| :-----------: | :-----------: |
+| `null` | Comprueba si un vector esta vacío o no |
+| `length` | Devuelve la longitud de un vector |
+| `concat` | Concatena dos vectores |
+| `map` | Ejecuta una función para cada elemento del vector |
+| `filter` | Elimina los elementos del vector que devuelven true tras aplicarles una función |
 
 
 
