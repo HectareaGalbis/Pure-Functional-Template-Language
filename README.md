@@ -365,11 +365,11 @@ La librería 'numeric' ofrece las operaciones básicas de cálculo numérico con
 | `not_bit` | ~ |
 | `shift_left` | << |
 | `shift_right` | >> |
-| `mcm` | |
-| `mcd` | |
-| `signum` | |
-| `abs` | |
-| `isqrt` | |
+| `mcm` | Mínimo común múltiplo |
+| `mcd` | Máximo común divisor |
+| `signum` | Signo de un número |
+| `abs` | Valor absoluto |
+| `isqrt` | Raíz cuadrada |
 
 ```cpp
 
@@ -392,6 +392,15 @@ int main(){
 ```
 Output:
 Los numeros 15 y 28 son coprimos. :)
+```
+
+## La clase Vector
+
+Aún no hemos definido las clases, pero me parece más adecuado dejarlo para la parte 'type' que vendrá posteriormente. Esta clase nos permite almacenar un número variable de parámetros 'non-type' del mismo tipo y contiene algunas funciones para manejarlas.
+
+```cpp
+using miVector = Vector<4,-10,14,5,-4,12>;   // <-- Vector de enteros.
+using miString = Vector<'H','e','l','l','o',',',' ','w','o','r','l','d','!'>;  // <-- Vector de caracteres.
 ```
 
 
