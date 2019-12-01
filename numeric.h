@@ -251,20 +251,7 @@ struct isPrime : public Currying<isPrime,bool(uintmax_t)>{
 };
 
 
-template<bool If, uintmax_t n>
-struct nextPrimeAux{
-    static const uintmax_t value = n;
-};
 
-template<uintmax_t n>
-struct nextPrimeAux<false,n>{
-    static const uintmax_t value = nextPrimeAux<isPrime::let<n+1>,n+1>::value;
-};
-
-struct nextPrime : Currying<nextPrime,uintmax_t(uintmax_t)>{
-    template<uintmax_t n>
-    static const uintmax_t value = nextPrimeAux<isPrime::let<n+1>,n+1>::value;
-};
 
 
 }

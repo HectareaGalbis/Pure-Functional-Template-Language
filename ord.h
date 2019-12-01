@@ -2,41 +2,38 @@
 #define ORD_H_INCLUDED
 
 #include "eq.h"
+#include "bool.h"
 
 namespace pftl{
 
 struct Ord : public Eq{
     template<class T>
-    static const bool lessEqualT = false;
+    using le = Undefined;
 };
 
 
-struct lessEqualTUncurry{
+struct le : public Currying<le,Type(Ord,Ord)>{
     template<class T, class S>
-    static const bool value = T::template lessEqualT<S>;
+    using value = typename T::template le<S>;
 };
-using lessEqualT = Currying<lessEqualTUncurry,bool(Ord,Ord)>;
 
 
-struct lessTUncurry{
+struct lt : public Currying<lt,Type(Ord,Ord)>{
     template<class T, class S>
-    static const bool value = T::template lessEqualT<S> && diffT::let<T>::template let<S>;
+    using value = typename andB::let<typename T::template le<S>>::template let<ne::let<T>::template let<S>>;
 };
-using lessT = Currying<lessTUncurry,bool(Ord,Ord)>;
 
 
-struct greaterEqualTUncurry{
+struct ge : Currying<ge,Type(Ord,Ord)>{
     template<class T, class S>
-    static const bool value = (not T::template lessEqual<S>) || equalT::let<T>::template let<S>;
+    using value = typename orB::let<notB::let<typename T::template le<S>>>::template let<typename eq::let<T>::template let<S>>;
 };
-using greateEqualT = Currying<greaterEqualTUncurry,bool(Ord,Ord)>;
 
 
-struct greaterTUncurry{
+struct gt : public Currying<gt,Type(Ord,Ord)>{
     template<class T, class S>
-    static const bool value = not T::template lessEqual<S>;
+    using value = typename notB::let<typename T::template le<S>>;
 };
-using greateT = Currying<greaterTUncurry,bool(Ord,Ord)>;
 
 
 }

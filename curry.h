@@ -317,7 +317,7 @@ struct If{
     };
 };
 
-
+//-----------------------------------------------------------
 
 template<class f, class g, bool isfRetNonType, bool isgRetNonType, bool isgArgNonType>
 struct compAux{};
@@ -373,7 +373,20 @@ struct compAux<f,g,false,false,false> : public Currying<compAux<f,g,false,false,
 template<class f, class g>
 using comp = compAux<f,g,is_nontype<typename f::type_ret>::value,is_nontype<typename g::type_ret>::value,is_nontype<typename g::type_arg>::value>;
 
+//-----------------------------------------------------------
 
+template<auto x>
+struct toTypeAux{};
+
+template<auto x>
+using toType = typename toTypeAux<x>::value;
+
+
+template<class T>
+struct toNonTypeAux{};
+
+template<class T>
+auto toNonType = toNonTypeAux<T>::value;
 
 //-----------------------------------------------------------
 //-----------------------------------------------------------

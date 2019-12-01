@@ -3,6 +3,8 @@
 
 #include "curry.h"
 #include "ord.h"
+#include "show.h"
+#include "vector.h"
 #include <ratio>
 
 namespace pftl{
@@ -35,7 +37,7 @@ struct Rational : public Ord{
 
 
 template<intmax_t n, intmax_t d = 1>
-struct Ratio : public Rational{
+struct Ratio : public Rational, public Show{
 
     static const intmax_t num = n;
     static const intmax_t den = d;
@@ -58,6 +60,8 @@ struct Ratio : public Rational{
     using reduce = Ratio<std::ratio<n,d>::num,std::ratio<n,d>::den>;
 
     constexpr static const float toFloat = (float)n/(float)d;
+
+    using show = Vector<'n','/','d'>;
 
 };
 

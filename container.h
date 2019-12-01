@@ -3,7 +3,7 @@
 
 
 #include "curry.h"
-
+#include "io.h"
 
 namespace pftl{
 
@@ -21,8 +21,6 @@ struct Container{
     using map = Undefined;
 
     using reverse = Undefined;
-
-    static const int elem = 0;
 
     template<class f>
     using filter = Undefined;

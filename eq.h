@@ -1,29 +1,29 @@
 #ifndef EQ_H_INCLUDED
 #define EQ_H_INCLUDED
 
+#include "curry.h"
+
+
 namespace pftl{
 
 
 struct Eq{
 
     template<class T>
-    static const bool equalT = std::is_same<Eq,T>::value;
+    using eq = Undefined;
 
 };
 
 
-struct equalTUncurry{
+struct eq : public Currying<eq,Type(Eq,Eq)>{
     template<class S, class T>
-    static const bool value = S::template equalT<T>;
+    using value = typename S::template eq<T>;
 };
-using equalT = Currying<equalTUncurry,bool(Eq,Eq)>;
 
-
-struct diffTUncurry{
+struct ne : Currying<ne,Type(Eq,Eq)>{
     template<class S, class T>
-    static const bool value = not S::template equalT<T>;
+    using value = typename S::template eq<T>::notB;   // <-- Un poco feo.
 };
-using diffT = Currying<diffTUncurry,bool(Eq,Eq)>;
 
 
 }
