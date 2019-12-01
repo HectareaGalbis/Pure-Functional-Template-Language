@@ -8,16 +8,18 @@ Los [templates](https://en.wikipedia.org/wiki/Template_(C%2B%2B)) son una herram
 * Método para curryficar metafunciones (curry.h).
 * Funciones básicas para cálculo booleano (bool.h).
 * Funciones básicas para cálculo numérico (numeric.h).
+* Clase Vector para manejar un número variable de datos 'non-type'.
+* Diferenciación clara entre el mundo 'non-type' y el 'type'.
+* Métodos 'especiales' para el paso de 'non-type' a 'type' y viceversa.
+* Clase List para manejar un número variable de datos 'type'.
+* Clase Ratio para el manejo de números racionales.
 
 ## ¿Qué busco ahora?
 
-* Cómo definir clases.
-* Cómo definir métodos en las clases.
-* Cómo crear funciones "polimórficas".
-* Clase Ratio (Números racionales).
-* Clase List (Listas de elementos de tipo integral (int,char,enum,...)).
-* Clase Tuple (Listas de tipos de datos o clases).
-* Clase Int (Integral) (Encapsulación de elementos de tipo integral en un tipo de dato para usarlos en tuplas).
+* Una forma de unir el cálculo en compilación con el cálculo en ejecución (método exe).
+* Una metodología para maximizar el cálculo en compilación y calcular lo justo y necesario en ejecución.
+* Mejorar la idea de tener 3 tipos principales de clases (clases puras, clases semipuras (puras con exe), clases impuras (una clase normal de C++))
+* Definición de parámetros de un programa (E/S), e hiperparámetros (parámetros precompilación, usados para generación de código).
 
 ## Instalación y requisitos
 
