@@ -569,5 +569,15 @@ La clase Currying nos permite obtener información sobre cualquier función que 
 * **type_ret**: Devuelve el tipo de retorno de la función.
 * **type_arg**: Devuelve el tipo del siguiente argumento.
 
+```cpp
+struct myFunc : public Currying<myFunc,Type(Figura,int)>{
+    template<int k, class F>
+    using value = //...
+};
 
+using myFuncInt = myFunc::let<Circulo<3>>;
+using TypeFunc = myFuncInt::type;               // <-- TypeFunc = Type(int)
+using ReturnType = myFuncInt::type_ret;         // <-- ReturnType = Type
+using ArgType = myFuncInt::type_arg;            // <-- ArgType = int
+```
 
