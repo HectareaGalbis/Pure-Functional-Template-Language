@@ -558,8 +558,16 @@ struct myFunc : public Currying<myFunc,Type(int)>{      // <-- Correcto
 
 struct myFunc : public Currying<myFunc,Figura(int)>{    // <-- Error
     template<int k>
-    static const int value = //...
+    using value = //...
 };
 ```
+
+### Metainformación
+
+La clase Currying nos permite obtener información sobre cualquier función que haya sido currificada. Existen tres miembros a los que podemos acceder a partir de una función:
+* **type**: Devuelve el tipo de la función. (Con el formato usado al definir los parámetros y el tipo de retorno de la función)
+* **type_ret**: Devuelve el tipo de retorno de la función.
+* **type_arg**: Devuelve el tipo del siguiente argumento.
+
 
 
