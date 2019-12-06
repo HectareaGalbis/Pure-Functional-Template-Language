@@ -528,8 +528,39 @@ El rectangulo de medidas 3x2 tiene un area de 6 unidades
 
 ## Un inciso sobre la clase Currying
 
+Ya se explicó al inicio que la clase Currying nos facilita la curryficación de metafunciones. Pero esta clase ofrece alguna cosa más. Por un lado tenemos la restricción de tipos de datos que ya se ha visto en el ejemplo anterior con la clase Figura. Y por el otro tenemos la metainformación, esto es, información sobre la función como su tipo, el tipo de retorno o el tipo del siguiente argumento.
 
+### Restricción de tipos de datos
 
+Hemos visto que en la clase Currying podemos especificar varios tipos de datos como entrada y el tipo de retorno de una función. En total tenemos las siguientes tres opciones:
 
+* **Tipos de dato 'non-type'**: Para pasar valores literales de tipo int, char, bool, ...
+* **Type**: Para pasar cualquier clase.
+* **Una clase**: Para pasar únicamente clases que son derivadas de la clase indicada.
+
+```cpp
+//Función que recibe como argumentos una clase derivada de Figura, un booleano, y una clase cualquiera.
+struct myFunc : public Currying<myFunc,int(Figura,bool,Type)>{
+    template<bool b, class F, class T>
+    static const int value = //...
+};
+```
+
+**Ojo**: Esto sólo se aplica para los parámetros de entrada. Para el tipo de retorno sólo tenemos dos opciones:
+
+* **Tipos de dato 'non-type'**: Para retornar valores literales de tipo int, char, bool, ...
+* **Type**: Para retornar cualquier clase.
+
+```cpp
+struct myFunc : public Currying<myFunc,Type(int)>{      // <-- Correcto
+    template<int k>
+    static const int value = //...
+};
+
+struct myFunc : public Currying<myFunc,Figura(int)>{    // <-- Error
+    template<int k>
+    static const int value = //...
+};
+```
 
 
