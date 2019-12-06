@@ -532,8 +532,7 @@ Ya se explicó al inicio que la clase Currying nos facilita la curryficación de
 
 ### Restricción de tipos de datos
 
-Hemos visto que en la clase Currying podemos especificar varios tipos de datos como entrada y el tipo de retorno de una función. En total tenemos las siguientes tres opciones:
-
+Hemos visto que en la clase Currying podemos especificar varios tipos de datos como entrada y el tipo de retorno de una función. Para definir los **parámetros de entrada** tenemos las siguientes tres opciones:
 * **Tipos de dato 'non-type'**: Para pasar valores literales de tipo int, char, bool, ...
 * **Type**: Para pasar cualquier clase.
 * **Una clase**: Para pasar únicamente clases que son derivadas de la clase indicada.
@@ -546,7 +545,7 @@ struct myFunc : public Currying<myFunc,int(Figura,bool,Type)>{
 };
 ```
 
-**Ojo**: Esto sólo se aplica para los parámetros de entrada. Para el tipo de retorno sólo tenemos dos opciones:
+**Ojo**: Esto sólo se aplica para los parámetros de entrada. Para el **tipo de retorno** sólo tenemos dos opciones:
 
 * **Tipos de dato 'non-type'**: Para retornar valores literales de tipo int, char, bool, ...
 * **Type**: Para retornar cualquier clase.
