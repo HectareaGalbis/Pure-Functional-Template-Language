@@ -6,33 +6,41 @@
 
 namespace pftl{
 
-struct Ord : public Eq{
+struct Ord_t : public Eq_t{
     template<class T>
     using le = Undefined;
 };
 
 
-struct le : public Currying<le,Type(Ord,Ord)>{
+struct le : public Currying<le,Type(Ord_t,Ord_t)>{
     template<class T, class S>
     using value = typename T::template le<S>;
 };
 
 
-struct lt : public Currying<lt,Type(Ord,Ord)>{
+struct lt : public Currying<lt,Type(Ord_t,Ord_t)>{
     template<class T, class S>
-    using value = typename andB::let<typename T::template le<S>>::template let<ne::let<T>::template let<S>>;
+    using value = typename and_logic::let<typename T::template le<S>>::template let<ne::let<T>::template let<S>>;
 };
 
 
-struct ge : Currying<ge,Type(Ord,Ord)>{
+struct ge : Currying<ge,Type(Ord_t,Ord_t)>{
     template<class T, class S>
-    using value = typename orB::let<notB::let<typename T::template le<S>>>::template let<typename eq::let<T>::template let<S>>;
+    using value = typename or_logic::let<not_logic::let<typename T::template le<S>>>::template let<typename eq::let<T>::template let<S>>;
 };
 
 
-struct gt : public Currying<gt,Type(Ord,Ord)>{
+struct gt : public Currying<gt,Type(Ord_t,Ord_t)>{
     template<class T, class S>
-    using value = typename notB::let<typename T::template le<S>>;
+    using value = typename not_logic::let<typename T::template le<S>>;
+};
+
+
+struct max : public Currying<max,Type(Ord_t,Ord_t)>{
+    template<class T, class S>
+    using value = typename If<typename le::let<T>::template let<S>>
+                                ::template Then<T>
+                                ::template Else<S>;
 };
 
 

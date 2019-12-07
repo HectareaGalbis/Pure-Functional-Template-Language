@@ -5,9 +5,12 @@
 
 namespace pftl{
 
+
 struct Undefined{};
 
+
 struct Type{};
+
 
 template<class S>
 struct ArgLit{
@@ -16,79 +19,6 @@ struct ArgLit{
         constexpr static const S value = k;
     };
 };
-
-//template<class F, class T, class Mv, class Mc>
-//struct Curry{};
-//
-//template<class F, class Ret, class S, class... Args, class... MvArgs, class... McArgs>
-//struct Curry<F,Ret(S,Args...),void(MvArgs...),void(McArgs...)>{
-//
-//    struct value{
-//        template<S k>
-//        using let = typename Curry<F,Ret(Args...),void(MvArgs...,typename ArgLit<S>::template Arg<k>),void(McArgs...)>::value;
-//    };
-//
-//};
-//
-//template<class F, class Ret, class... Args, class... MvArgs, class... McArgs>
-//struct Curry<F,Ret(Type,Args...),void(MvArgs...),void(McArgs...)>{
-//
-//    struct value{
-//        template<class X>
-//        using let = typename Curry<F,Ret(Args...),void(MvArgs...),void(McArgs...,X)>::value;
-//    };
-//
-//};
-//
-//template<class F, class Ret, class S, class... MvArgs, class... McArgs>
-//struct Curry<F,Ret(S),void(MvArgs...),void(McArgs...)>{
-//
-//    struct value{
-//        template<S k>
-//        static const Ret let = F::template value<MvArgs::value...,k,McArgs...>;
-//    };
-//
-//};
-//
-//template<class F, class S, class... MvArgs, class... McArgs>
-//struct Curry<F,Type(S),void(MvArgs...),void(McArgs...)>{
-//
-//    struct value{
-//        template<S k>
-//        using let = typename F::template value<MvArgs::value...,k,McArgs...>;
-//    };
-//
-//};
-//
-//template<class F, class Ret, class... MvArgs, class... McArgs>
-//struct Curry<F,Ret(Type),void(MvArgs...),void(McArgs...)>{
-//
-//    struct value{
-//        template<class X>
-//        static const Ret let = F::template value<MvArgs::value...,McArgs...,X>;
-//    };
-//
-//};
-//
-//template<class F, class... MvArgs, class... McArgs>
-//struct Curry<F,Type(Type),void(MvArgs...),void(McArgs...)>{
-//
-//    struct value{
-//        template<class X>
-//        using let = typename F::template value<MvArgs::value...,McArgs...,X>;
-//    };
-//
-//};
-//
-//
-//template<class F, class T>
-//using Currying = typename Curry<F,T,void(),void()>::value;
-
-
-
-//-----------------------------------------------------------
-//-----------------------------------------------------------
-//-----------------------------------------------------------
 
 
 template<bool b, class Ret, Ret x>
@@ -307,18 +237,6 @@ using Currying = typename CurryingAux<F,T>::value;
 //-----------------------------------------------------------
 //-----------------------------------------------------------
 
-
-template<bool c>
-struct If{
-    template<class X>
-    struct Then{
-        template<class Y>
-        using Else = typename std::conditional<c,X,Y>::type;
-    };
-};
-
-//-----------------------------------------------------------
-
 template<class f, class g, bool isfRetNonType, bool isgRetNonType, bool isgArgNonType>
 struct compAux{};
 
@@ -387,76 +305,6 @@ struct toNonTypeAux{};
 
 template<class T>
 auto toNonType = toNonTypeAux<T>::value;
-
-//-----------------------------------------------------------
-//-----------------------------------------------------------
-//-----------------------------------------------------------
-
-
-
-///Metafuncion con lazy-parameters.
-
-///Ejemplo1
-struct TrueExample : public Currying<TrueExample,Type(Type,Type)>{
-    template<class X, class Y>
-    using value = X;
-};
-
-
-
-
-///Ejemplo2
-struct ConditionalExample : public Currying<ConditionalExample,Type(bool,Type,Type)>{
-    template<bool b, class X, class Y>
-    using value = typename If<b>::template Then<X>::template Else<Y>;
-};
-
-
-
-///Ejemplo3 (Un único argumento)
-struct IsEvenExample : public Currying<IsEvenExample,bool(int)>{
-    template<int n>
-    static const bool value = (n%2 == 0);
-};
-
-
-
-///Ejemplo4 (Alteracion del orden de los argumentos) (En la definicion: non-types a la izquierda y types a la derecha)
-struct LeftOrRightExample : Currying<LeftOrRightExample,Type(Type,int,Type)>{
-    template<int k, class X, class Y>
-    using value = typename If<(k<0)>::template Then<X>::template Else<Y>;
-};
-
-
-
-//-----------------------------------------------------------
-//-----------------------------------------------------------
-//-----------------------------------------------------------
-
-///Currying 2
-
-//template<class... Args>
-//using Tuple = void(Args...);
-//
-//
-//template<class NonTypes, class Types>
-//struct Currying2{};
-//
-//template<class... NonTypes, class... Types>
-//struct Currying2<Tuple<NonTypes...>,Tuple<Types...>>{
-//
-//    template<template<NonTypes...,class...> class Func>
-//    struct Using{
-//
-//        template<NonTypes... vargs,class... targs>
-//        using value = Func<vargs...,targs...>;
-//
-//        template<class FuncType>
-//        using OfType = typename Currying<Currying2<Tuple<NonTypes...>,Tuple<Types...>>::template Using<Func>,FuncType>;
-//
-//    };
-//
-//};
 
 }
 

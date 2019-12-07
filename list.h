@@ -2,10 +2,14 @@
 #define LIST_H_INCLUDED
 
 
+#include "curry.h"
+#include "container.h"
+#include "exe.h"
+
 namespace pftl{
 
 
-struct List_t : public Container{};
+struct List_t : public Container_t{};
 
 
 template<class L, class M>
@@ -34,6 +38,8 @@ struct List : public List_t{
     template<class f>
     using filter = List<>;
 
+    static void exe(){}
+
 };
 
 
@@ -54,6 +60,11 @@ struct List<X,XS...> : public List_t{
 
     template<class f>
     using filter = typename List_filter<List<X,XS...>,f>::value;
+
+    static void exe(){
+        X::exe();
+        List<XS...>::exe();
+    }
 
 };
 

@@ -12,7 +12,7 @@ namespace pftl{
 //----------------------
 //----------------------
 
-struct Vector_t : public Container, public IO{};
+struct Vector_t : public Container_t{};
 
 
 template<auto...>
@@ -25,6 +25,16 @@ struct Vector_concat{};
 
 template<class L, class f>
 struct Vector_filter{};
+
+
+template<class S>
+static void Vector_print(S x){
+    std::cout << x << " ";
+};
+
+void Vector_print(char x){
+    printf("%c",x);
+};
 
 
 //----------------------
@@ -49,7 +59,7 @@ struct Vector<> : public Vector_t{
     using filter = Vector<>;
 
     static void print(){
-        std::cout << std::endl;
+        printf("\n");
     }
 
 };
@@ -73,7 +83,7 @@ struct Vector<x,xs...> : public Vector_t{
     using filter = typename Vector_filter<Vector<x,xs...>,f>::value;
 
     static void print(){
-        std::cout << x;
+        Vector_print(x);
         Vector<xs...>::print();
     }
 

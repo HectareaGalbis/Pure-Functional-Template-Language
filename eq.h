@@ -7,7 +7,7 @@
 namespace pftl{
 
 
-struct Eq{
+struct Eq_t{
 
     template<class T>
     using eq = Undefined;
@@ -15,12 +15,12 @@ struct Eq{
 };
 
 
-struct eq : public Currying<eq,Type(Eq,Eq)>{
+struct eq : public Currying<eq,Type(Eq_t,Eq_t)>{
     template<class S, class T>
     using value = typename S::template eq<T>;
 };
 
-struct ne : Currying<ne,Type(Eq,Eq)>{
+struct ne : Currying<ne,Type(Eq_t,Eq_t)>{
     template<class S, class T>
     using value = typename S::template eq<T>::notB;   // <-- Un poco feo.
 };

@@ -10,7 +10,7 @@
 namespace pftl{
 
 
-struct Rational : public Ord{
+struct Rational_t : public Ord_t{
 
     template<class R>
     using plusT = Undefined;//typename Ratio_plusT<Ratio<n,d>,R>::value;
@@ -37,7 +37,7 @@ struct Rational : public Ord{
 
 
 template<intmax_t n, intmax_t d = 1>
-struct Ratio : public Rational, public Show{
+struct Ratio : public Rational_t{
 
     static const intmax_t num = n;
     static const intmax_t den = d;
@@ -67,11 +67,11 @@ struct Ratio : public Rational, public Show{
 
 //-------------------
 
-struct reduceUncurry{
+struct reduce : public Currying<reduce,Type(Rational_t)>{
     template<class R>
     using value = typename R::reduce;
 };
-using reduce = Currying<reduceUncurry,Type(Rational)>;
+
 
 }
 

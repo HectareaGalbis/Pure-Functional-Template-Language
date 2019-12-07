@@ -7,115 +7,162 @@
 namespace pftl{
 
 
-struct not_logic : public Currying<not_logic,bool(bool)>{
-    template<bool p>
-    static const bool value = !p;
-};
-
-
-struct and_logic : public Currying<and_logic,bool(bool,bool)>{
-    template<bool p, bool q>
-    static const bool value = p && q;
-};
-
-
-struct or_logic : public Currying<or_logic,bool(bool,bool)>{
-    template<bool p, bool q>
-    static const bool value = p || q;
-};
-
-
-//----------------------------------------
-//----------------------------------------
-//----------------------------------------
-
-
 ///Clase Bool.
-struct Bool : public Eq{
+struct Bool_t : public Eq_t{
 
-    using andB = Undefined;
+    using and_logic = Undefined;
 
-    using orB = Undefined;
+    using or_logic = Undefined;
 
-    using notB = Undefined;
+    using not_logic = Undefined;
 
 };
 
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-struct andB : public Currying<andB,Type(Bool,Bool)>{
+struct and_logic : public Currying<and_logic,Type(Bool_t,Bool_t)>{
     template<class B, class C>
-    using value = typename B::template andB<C>;
+    using value = typename B::template and_logic<C>;
 };
 
-struct orB : public Currying<orB,Type(Bool,Bool)>{
+struct or_logic : public Currying<or_logic,Type(Bool_t,Bool_t)>{
     template<class B, class C>
-    using value = typename B::template orB<C>;
+    using value = typename B::template or_logic<C>;
 };
 
-struct notB : public Currying<notB,Type(Bool)>{
+struct not_logic : public Currying<not_logic,Type(Bool_t)>{
     template<class B>
-    using value = typename B::notB;
+    using value = typename B::not_logic;
 };
 
+
+//********************************************************************************
+//--------------------------------------------------------------------------------
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//--------------------------------------------------------------------------------
+//********************************************************************************
 
 ///Constructores
 struct True;
 struct False;
 
+//--------------------------------------------------------------------------------
+
+template<bool b>
+struct BoolAux{
+    using value = False;
+};
+
+template<>
+struct BoolAux<true>{
+    using value = True;
+};
+
+template<bool b>
+using Bool = typename BoolAux<b>::value;
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 template<class B, class C>
-struct eqAux{};
+struct eq_Bool{};
 
-template<>
-struct eqAux<False,False>{
-    using value = True;
-};
+//--------------------------------------------------------------------------------
 
-template<>
-struct eqAux<False,True>{
-    using value = False;
-};
-
-template<>
-struct eqAux<True,False>{
-    using value = False;
-};
-
-template<>
-struct eqAux<True,True>{
-    using value = True;
-};
-
-
-struct True : public Bool{
+struct True : public Bool_t{
 
     template<class B>
-    using andB = B;
+    using and_logic = B;
 
     template<class B>
-    using orB = True;
+    using or_logic = True;
 
-    using notB = False;
+    using not_logic = False;
 
     //---
 
     template<class B>
-    using eq = typename eqAux<True,B>::value;
+    using eq = typename eq_Bool<True,B>::value;
 
 };
 
-struct False : public Bool{
+//--------------------------------------------------------------------------------
+
+struct False : public Bool_t{
 
     template<class B>
-    using andB = False;
+    using and_logic = False;
 
     template<class B>
-    using orB = B;
+    using or_logic = B;
 
-    using notB = True;
+    using not_logic = True;
 
     template<class B>
-    using eq = typename eqAux<False,B>::value;
+    using eq = typename eq_Bool<False,B>::value;
 
+};
+
+//--------------------------------------------------------------------------------
+
+template<>
+struct eq_Bool<False,False>{
+    using value = True;
+};
+
+template<>
+struct eq_Bool<False,True>{
+    using value = False;
+};
+
+template<>
+struct eq_Bool<True,False>{
+    using value = False;
+};
+
+template<>
+struct eq_Bool<True,True>{
+    using value = True;
+};
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+///Conversiones 'non-type' 'type'
+template<bool b>
+struct toTypeAux<b>{
+    using value = Bool<b>;
+};
+
+
+template<>
+struct toNonTypeAux<True>{
+    static const bool value = true;
+};
+template<>
+struct toNonTypeAux<False>{
+    static const bool value = false;
+};
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+template<class B>
+struct If{};
+
+template<>
+struct If<True>{
+    template<class X>
+    struct Then{
+        template<class Y>
+        using Else = X;
+    };
+};
+
+template<>
+struct If<False>{
+    template<class X>
+    struct Then{
+        template<class Y>
+        using Else = Y;
+    };
 };
 
 

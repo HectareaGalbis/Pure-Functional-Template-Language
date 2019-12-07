@@ -8,7 +8,7 @@
 namespace pftl{
 
 
-struct Container{
+struct Container_t{
 
     static const bool null = false;
 
@@ -28,37 +28,37 @@ struct Container{
 };
 
 
-struct null : public Currying<null,bool(Container)>{
+struct null : public Currying<null,bool(Container_t)>{
     template<class S>
     static const bool value = S::null;
 };
 
 
-struct length : public Currying<length,size_t(Container)>{
+struct length : public Currying<length,size_t(Container_t)>{
     template<class S>
     static const size_t value = S::length;
 };
 
 
-struct concat : public Currying<concat,Type(Container,Container)>{
+struct concat : public Currying<concat,Type(Container_t,Container_t)>{
     template<class L, class M>
     using value = typename L::template concat<M>;
 };
 
 
-struct map : public Currying<map,Type(Type,Container)>{
+struct map : public Currying<map,Type(Type,Container_t)>{
     template<class f, class L>
     using value = typename L::template map<f>;
 };
 
 
-struct reverse : public Currying<reverse,Type(Container)>{
+struct reverse : public Currying<reverse,Type(Container_t)>{
     template<class S>
     using value = typename S::reverse;
 };
 
 
-struct filter : public Currying<filter,Type(Type,Container)>{
+struct filter : public Currying<filter,Type(Type,Container_t)>{
     template<class f, class L>
     using value = typename L::template filter<f>;
 };
