@@ -9,7 +9,6 @@ Los [templates](https://en.wikipedia.org/wiki/Template_(C%2B%2B)) son una herram
 * Funciones básicas para cálculo booleano (bool.h).
 * Funciones básicas para cálculo numérico (numeric.h).
 * Clase Vector para manejar un número variable de datos 'non-type'.
-* Diferenciación clara entre el mundo 'non-type' y el 'type'.
 * Métodos 'especiales' para el paso de 'non-type' a 'type' y viceversa.
 * Clase List para manejar un número variable de datos 'type'.
 * Clase Ratio para el manejo de números racionales.
