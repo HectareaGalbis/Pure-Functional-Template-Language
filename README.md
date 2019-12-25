@@ -223,92 +223,11 @@ struct myFunction : public Currying<myFunction,bool(Type,int,Type,int)>{        
 
 ```
 
-## Definición de nuevas funciones
-
-Hemos comenzado viendo que podemos curryficar funciones con struct let anidados o con la clase Currying. Entonces, ¿cuál debo usar? Literalmente, la que quieras, la que te sea más cómoda. Si no te decides, puedes seguir el siguiente procedimiento:
-
-```cpp
-
-// ¿Se puede obtener a partir de otra función?
-using myFunctionDerived = myFunctionBase::let<Something>;
 
 
-// ¿Sólo recibe un parámetro?  (¡¡¡Ojo!!!! -> No recomendada por motivos que se explicarán en apartados siguientes)
-struct myFunction{              // <-- Ya está curryficada.
-    template<class X>       
-    using let = //...
-}
+## La librería Non-Type.
 
-
-// ¿Recibe más de un parámetro?
-struct myFunction : public Currying<myFunction,bool(Type,char,int,Type)>;{
-    template<char c, int k, class X, class Y>
-    static const bool value = //...
-}
-
-```
-
-## Meta-funciones auxiliares
-
-En muchos casos nos encontraremos con la necesidad de crear funciones recursivas o simplemente necesitaremos utilizar especializaciones de templates para conseguir unos resultados deseados. 
-
-> La especialización de templates recuerda bastante al encaje de patrones utilizado en lenguajes como Haskell.
-
-Vamos a definir la función fibo, que dado un entero n, nos devuelva el número que ocupa la posición n en la sucesión de Fibonacci. Un primer intento podría ser el siguiente:
-
-```cpp
-
-struct fibo : public Currying<fibo,int(int)>{
-
-    template<int n>
-    static const int value = n==0 ? 0 : (n==1 ? 1 : fibo::let<n-2>+fibo::let<n-1>);
-
-}
-
-```
-
-Si n es 0, retornamos 0. Si n es 1, retornamos 1. Y si n es otro número, retornamos la suma de los dos elementos anteriores de la sucesión de Fibonacci. Pero esto no compila. El error que se obtiene indica que estamos intentando usar un tipo de dato incompleto, en este caso fibo. Esto se puede entender como que al instanciar la clase fibo para un n en concreto también se instanciará para n-1 y n-2. En ningún momento estamos indicando que fibo<0> debe dejar de instanciarse, por lo que se seguirá instanciando fibo para los números negativos y así seguirá sin fin. Para evitar esto debemos usar meta-funciones auxiliares:
-
-```cpp
-
-template<int n>
-struct fiboAux{                 // <-- Función general recursiva
-    static const int value = FiboAux<n-2>::value + FiboAux<n-1>::value;
-};
-
-template<>
-struct fiboAux<0>{              // <-- Especialización para n==0
-    static const int value = 0;
-};
-
-template<>
-struct fiboAux<1>{              // <-- Especialización para n==1
-    static const int value = 1;
-};
-
-struct fibo : public Currying<fibo,int(int)>{
-    template<int n>
-    static const int value = fiboAux<n>::value;       // <-- Llamada a la meta-función auxiliar
-};
-
-
-int main(){
-
-    std::cout << fibo::let<10> << std::endl;
-
-    return 0;
-}
-
-```
-
-```
-Output:
-55
-```
-
-## Distinción entre los parámetros 'non-type' y los parámetros 'type'.
-
-C++ hace una distinción muy clara entre estos dos tipos de parámetros, lo que hace que este proyecto haga lo mismo. En primer lugar tendremos un conjunto de funciones para el manejo de datos 'non-type' y por otro lado otro conjunto para el manejo de datos 'type'. Además tendremos un par de funciones que harán de nexo entre estos dos conjuntos. Empezamos viendo la parte 'non-type'.
+C++ hace una distinción muy clara entre los parámetros 'non-type' y 'type', lo que hace que este proyecto haga lo mismo. En primer lugar tendremos un conjunto de funciones para el manejo de datos 'non-type' y por otro lado una librería para manejar datos Type con un funcionamiento parecido a Haskell. Por la parte 'non_type' encontramos los ficheros 
 
 ## La librería 'bool.h'.
 
