@@ -6,12 +6,16 @@ Los [templates](https://en.wikipedia.org/wiki/Template_(C%2B%2B)) son una herram
 ## Situación actual
 
 * Método para curryficar metafunciones (curry.h).
-* Funciones básicas para cálculo booleano (bool.h).
-* Funciones básicas para cálculo numérico (numeric.h).
-* Clase Vector para manejar un número variable de datos 'non-type'.
+* Funciones básicas para cálculo booleano (bool_nt.h).
+* Funciones básicas para cálculo numérico (integral_nt.h).
+* Clase Vector para manejar un número variable de datos 'Non-Type'.
 * Métodos 'especiales' para el paso de 'non-type' a 'type' y viceversa.
-* Clase List para manejar un número variable de datos 'type'.
-* Clase Ratio para el manejo de números racionales.
+* Tipo de dato List para manejar un número variable de datos 'Type'.
+* Tipo de dato Int para manejar enteros.
+* Tipo de dato Bool para manejar booleanos.
+* Tipo de dato Char para manejar caracteres.
+* Clases Show, Eq, Ord, Num, Integral, Enum...
+* Tipo de dato IO para el paso de cálculo en compilación a cálculo secuencial (incluida E/S).
 
 ## ¿Qué busco ahora?
 
