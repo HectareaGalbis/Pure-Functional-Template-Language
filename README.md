@@ -366,19 +366,19 @@ Errores de compilación:
 'value' in 'struct Display<pftl::Vector<'H', 'e', 'o', ',', ' ', 'w', 'o', 'r', 'd', '!'> >' does not name a type
 ```
 
-## Clases, instancias y métodos
+## Tipos de dato y constructores
 
 A partir de ahora nos metemos en el terreno de los datos 'type'. Poco a poco iremos definiendo tipos de datos básicos que nos permitirán hacer cálculos como si de otro lenguaje de programación se tratara. Hay que pensar que esto no está nada relacionado con los tipos de dato 'non-type', aunque podremos pasar de un lado a otro con los tipos más básicos (int, char, bool,...).
 
-### Clases e instancias
+### Tipo de dato
 
-Una clase viene a representar un tipo de dato y para crear una instancia de dicha clase usaremos un constructor. En la práctica una clase será una estructura de C++. 
+Una tipo de dato será una estructura de C++. 
 
 ```cpp
-struct Figura{};         // <-- Clase Figura
+struct Figura{};         // <-- Tipo de dato Figura
 ```
 
-Y los constructores son estructuras template que son hijas de la clase.
+Y los constructores son estructuras template que heredan del tipo de dato.
 
 ```cpp
 template<int radio>
@@ -396,9 +396,9 @@ using miCirculo = Circulo<5>;           // <-- Instancia de una Figura.
 
 > Seguiré una norma para distinguir funciones de clases. Las funciones empiezan por minúscula mientras que las clases empiezan por mayúscula.
 
-### Métodos de una clase
+### Métodos de un tipo de dato
 
-Los métodos son metafunciones que definen las clases y que cada constructor debe implementar. De esta forma conseguiremos 'polimorfismo' con funciones que manejen estos tipos de datos.
+Los métodos son metafunciones que definen los tipos de datos y que cada constructor debe implementar. De esta forma conseguiremos 'polimorfismo' con funciones que manejen estos tipos de datos.
 
 ```cpp
 struct Figura{
@@ -454,33 +454,16 @@ Ya se explicó al inicio que la clase Currying nos facilita la curryficación de
 
 ### Restricción de tipos de datos
 
-Hemos visto que en la clase Currying podemos especificar varios tipos de datos como entrada y el tipo de retorno de una función. Para definir los **parámetros de entrada** tenemos las siguientes tres opciones:
-* **Tipos de dato 'non-type'**: Para pasar valores literales de tipo int, char, bool, ...
+Hemos visto que en la clase Currying podemos especificar varios tipos de datos como entrada y el tipo de retorno de una función. Existen en total tres opciones:
+* **Tipos de dato 'non-type'**: Indican valores literales de tipo int, char, bool, ...
 * **Type**: Para pasar cualquier clase.
-* **Una clase**: Para pasar únicamente clases que son derivadas de la clase indicada.
+* **Una tipo de dato**: Para pasar únicamente instancias derivadas del tipo de dato indicado.
 
 ```cpp
-//Función que recibe como argumentos una clase derivada de Figura, un booleano, y una clase cualquiera.
+//Función que recibe como argumentos una instancia de Figura, un booleano, y una clase cualquiera.
 struct myFunc : public Currying<myFunc,int(Figura,bool,Type)>{
     template<bool b, class F, class T>
     static const int value = //...
-};
-```
-
-**Ojo**: Esto sólo se aplica para los parámetros de entrada. Para el **tipo de retorno** sólo tenemos dos opciones:
-
-* **Tipos de dato 'non-type'**: Para retornar valores literales de tipo int, char, bool, ...
-* **Type**: Para retornar cualquier clase.
-
-```cpp
-struct myFunc : public Currying<myFunc,Type(int)>{      // <-- Correcto
-    template<int k>
-    static const int value = //...
-};
-
-struct myFunc : public Currying<myFunc,Figura(int)>{    // <-- Error
-    template<int k>
-    using value = //...
 };
 ```
 
