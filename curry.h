@@ -1,16 +1,37 @@
 #ifndef CURRY_H_INCLUDED
 #define CURRY_H_INCLUDED
 
-#include <string>
-
 namespace pftl{
 
+//********************************************************************************
+//--------------------------------------------------------------------------------
 
+///Para definir las clases
+struct Class{};
+
+//--------------------------------------------------------------------------------
+
+///Para comprobar si un tipo de dato especializa a una clase
+template<template<class a> class C, class A>
+using Where = typename std::enable_if<!std::is_base_of<Class,C<A>>::value,void>::type;
+
+//--------------------------------------------------------------------------------
+
+///Para imprimir una deduccion
+template<class S>
+struct Display{};
+
+//--------------------------------------------------------------------------------
+
+///Para especificar que una metafuncion no esta definida
 struct Undefined{};
 
+//--------------------------------------------------------------------------------
 
+///La clase de la que heredan el resto de tipos de datos
 struct Type{};
 
+//********************************************************************************
 
 template<class S>
 struct ArgLit{
@@ -20,6 +41,7 @@ struct ArgLit{
     };
 };
 
+//--------------------------------------------------------------------------------
 
 template<bool b, class Ret, Ret x>
 struct enable_if_int{};
@@ -29,6 +51,7 @@ struct enable_if_int<true,Ret,x>{
     static const Ret value = x;
 };
 
+//--------------------------------------------------------------------------------
 
 template<class S>
 struct is_nontype{
@@ -37,15 +60,22 @@ struct is_nontype{
                               std::is_null_pointer<S>::value;
 };
 
+//--------------------------------------------------------------------------------
 
-template<class F, class In, class Ty>
+template<class F, class Ret, class In, class Ty>
 struct RetType{};
 
+template<class F, class Ret, class... InArgs, class... TyArgs>
+struct RetType<F,Ret,void(InArgs...),void(TyArgs...)>{
+    using value = typename std::enable_if<std::is_base_of<Ret,typename F::template value<InArgs::value...,TyArgs...>>::value,typename F::template value<InArgs::value...,TyArgs...>>::type;
+};
+
 template<class F, class... InArgs, class... TyArgs>
-struct RetType<F,void(InArgs...),void(TyArgs...)>{
+struct RetType<F,Type,void(InArgs...),void(TyArgs...)>{
     using value = typename F::template value<InArgs::value...,TyArgs...>;
 };
 
+//--------------------------------------------------------------------------------
 
 template<class F, class Ret, class In, class Ty>
 struct RetInt{};
@@ -55,6 +85,7 @@ struct RetInt<F,Ret,void(InArgs...),void(TyArgs...)>{
     static const Ret value = F::template value<InArgs::value...,TyArgs...>;
 };
 
+//--------------------------------------------------------------------------------
 
 template<class F, bool isInt, class T, class In, class Ty>
 struct CurryInt{};
@@ -131,82 +162,85 @@ struct CurryInt<F,false,Ret(Type),void(InArgs...),void(TyArgs...)>{
     };
 };
 
+//--------------------------------------------------------------------------------
 
 template<class F, bool isInt, class T, class In, class Ty>
 struct CurryType{};
 
-template<class F, class Next, class Next2, class... Args, class... InArgs, class... TyArgs>
-struct CurryType<F,true,Type(Next,Next2,Args...),void(InArgs...),void(TyArgs...)>{
+template<class F, class Ret, class Next, class Next2, class... Args, class... InArgs, class... TyArgs>
+struct CurryType<F,true,Ret(Next,Next2,Args...),void(InArgs...),void(TyArgs...)>{
     struct value{
         template<Next x>
-        using let = typename CurryType<F,is_nontype<Next2>::value,Type(Next2,Args...),void(InArgs...,typename ArgLit<Next>::template Arg<x>),void(TyArgs...)>::value;
+        using let = typename CurryType<F,is_nontype<Next2>::value,Ret(Next2,Args...),void(InArgs...,typename ArgLit<Next>::template Arg<x>),void(TyArgs...)>::value;
 
-        using type = Type(Next,Next2,Args...);
-        using type_ret = Type;
+        using type = Ret(Next,Next2,Args...);
+        using type_ret = Ret;
         using type_arg = Next;
     };
 };
 
-template<class F, class Next, class Next2, class... Args, class... InArgs, class... TyArgs>
-struct CurryType<F,false,Type(Next,Next2,Args...),void(InArgs...),void(TyArgs...)>{
+template<class F, class Ret, class Next, class Next2, class... Args, class... InArgs, class... TyArgs>
+struct CurryType<F,false,Ret(Next,Next2,Args...),void(InArgs...),void(TyArgs...)>{
     struct value{
         template<class x>
-        using let = typename std::enable_if<std::is_base_of<Next,x>::value,typename CurryType<F,is_nontype<Next2>::value,Type(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value>::type;
+        using let = typename std::enable_if<std::is_base_of<Next,x>::value,typename CurryType<F,is_nontype<Next2>::value,Ret(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value>::type;
 
-        using type = Type(Next,Next2,Args...);
-        using type_ret = Type;
+        using type = Ret(Next,Next2,Args...);
+        using type_ret = Ret;
         using type_arg = Next;
     };
 };
 
-template<class F, class Next2, class... Args, class... InArgs, class... TyArgs>
-struct CurryType<F,false,Type(Type,Next2,Args...),void(InArgs...),void(TyArgs...)>{
+template<class F, class Ret, class Next2, class... Args, class... InArgs, class... TyArgs>
+struct CurryType<F,false,Ret(Type,Next2,Args...),void(InArgs...),void(TyArgs...)>{
     struct value{
         template<class x>
-        using let = typename CurryType<F,is_nontype<Next2>::value,Type(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value;
+        using let = typename CurryType<F,is_nontype<Next2>::value,Ret(Next2,Args...),void(InArgs...),void(TyArgs...,x)>::value;
 
-        using type = Type(Type,Next2,Args...);
-        using type_ret = Type;
+        using type = Ret(Type,Next2,Args...);
+        using type_ret = Ret;
         using type_arg = Type;
     };
 };
 
-template<class F, class Next, class... InArgs, class... TyArgs>
-struct CurryType<F,true,Type(Next),void(InArgs...),void(TyArgs...)>{
+template<class F, class Ret, class Next, class... InArgs, class... TyArgs>
+struct CurryType<F,true,Ret(Next),void(InArgs...),void(TyArgs...)>{
     struct value{
         template<Next x>
-        using let = typename RetType<F,void(InArgs...,typename ArgLit<Next>::template Arg<x>),void(TyArgs...)>::value; //typename F::template value<InArgs::value...,x,TyArgs...>;
+        using let = typename RetType<F,Ret,void(InArgs...,typename ArgLit<Next>::template Arg<x>),void(TyArgs...)>::value; //typename F::template value<InArgs::value...,x,TyArgs...>;
 
-        using type = Type(Next);
-        using type_ret = Type;
+        using type = Ret(Next);
+        using type_ret = Ret;
         using type_arg = Next;
     };
 };
 
-template<class F, class Next, class... InArgs, class... TyArgs>
-struct CurryType<F,false,Type(Next),void(InArgs...),void(TyArgs...)>{
+template<class F, class Ret, class Next, class... InArgs, class... TyArgs>
+struct CurryType<F,false,Ret(Next),void(InArgs...),void(TyArgs...)>{
     struct value{
+//        typename Display<Ret(Next)>::value x;
         template<class x>
-        using let = typename std::enable_if<std::is_base_of<Next,x>::value,typename RetType<F,void(InArgs...),void(TyArgs...,x)>::value>::type; //typename std::enable_if<std::is_base_of<Next,x>::value,typename F::template value<InArgs::value...,TyArgs...,x>>::type;
+        using let = typename std::enable_if<std::is_base_of<Next,x>::value,typename RetType<F,Ret,void(InArgs...),void(TyArgs...,x)>::value>::type;
 
-        using type = Type(Next);
-        using type_ret = Type;
+        using type = Ret(Next);
+        using type_ret = Ret;
         using type_arg = Next;
     };
 };
 
-template<class F, class... InArgs, class... TyArgs>
-struct CurryType<F,false,Type(Type),void(InArgs...),void(TyArgs...)>{
+template<class F, class Ret, class... InArgs, class... TyArgs>
+struct CurryType<F,false,Ret(Type),void(InArgs...),void(TyArgs...)>{
     struct value{
         template<class x>
-        using let = typename RetType<F,void(InArgs...),void(TyArgs...,x)>::value; //typename F::template value<InArgs::value...,TyArgs...,x>;
+        using let = typename RetType<F,Ret,void(InArgs...),void(TyArgs...,x)>::value; //typename F::template value<InArgs::value...,TyArgs...,x>;
 
-        using type = Type(Type);
-        using type_ret = Type;
+        using type = Ret(Type);
+        using type_ret = Ret;
         using type_arg = Type;
     };
 };
 
+//--------------------------------------------------------------------------------
 
 template<class F, bool isRetInt, class T>
 struct CurryingAux2{};
@@ -216,9 +250,9 @@ struct CurryingAux2<F,true,Ret(Next,Args...)>{
     using value = typename CurryInt<F,is_nontype<Next>::value,Ret(Next,Args...),void(),void()>::value;
 };
 
-template<class F, class Next, class... Args>
-struct CurryingAux2<F,false,Type(Next,Args...)>{
-    using value = typename CurryType<F,is_nontype<Next>::value,Type(Next,Args...),void(),void()>::value;
+template<class F, class Ret, class Next, class... Args>
+struct CurryingAux2<F,false,Ret(Next,Args...)>{
+    using value = typename CurryType<F,is_nontype<Next>::value,Ret(Next,Args...),void(),void()>::value;
 };
 
 
@@ -294,18 +328,30 @@ using comp = compAux<f,g,is_nontype<typename f::type_ret>::value,is_nontype<type
 //-----------------------------------------------------------
 
 template<auto x>
-struct toTypeAux{};
+struct toType_impl{};
 
 template<auto x>
-using toType = typename toTypeAux<x>::value;
+using toType = typename toType_impl<x>::value;
 
 
 template<class T>
-struct toNonTypeAux{};
+struct toNonType_impl{};
 
 template<class T>
-auto toNonType = toNonTypeAux<T>::value;
+const auto toNonType = toNonType_impl<T>::value;
 
 }
+
+//********************************************************************************
+
+namespace std{
+
+    template<class T>
+    struct is_base_of<pftl::Type,T>{
+        static const bool value = true;
+    };
+
+}
+
 
 #endif // CURRY_H_INCLUDED
