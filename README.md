@@ -227,11 +227,11 @@ struct myFunction : public Currying<myFunction,bool(Type,int,Type,int)>{        
 
 ## La librería Non-Type.
 
-C++ hace una distinción muy clara entre los parámetros 'non-type' y 'type', lo que hace que este proyecto haga lo mismo. En primer lugar tendremos un conjunto de funciones para el manejo de datos 'non-type' y por otro lado una librería para manejar datos Type con un funcionamiento parecido a Haskell. Por la parte 'non_type' encontramos los ficheros 
+C++ hace una distinción muy clara entre los parámetros 'non-type' y 'type', lo que hace que este proyecto haga lo mismo. En primer lugar tendremos un conjunto de funciones para el manejo de datos 'non-type' y por otro lado una librería para manejar datos Type con un funcionamiento parecido a Haskell. Por la parte 'non_type' encontramos los ficheros 'bool_nt.h', 'integral_nt.h' y 'vector.h'.
 
-## La librería 'bool.h'.
+## El fichero 'bool_nt.h'.
 
-Esta librería contiene un conjunto de funciones básicas (not, and, or) para el manejo de valores booleanos. Como ya existen las palabras reservadas not, and y or en C++ se usan not_logic, and_logic y or_logic.
+Este fichero contiene un conjunto de funciones básicas (not, and, or) para el manejo de valores booleanos. Como ya existen las palabras reservadas not, and y or en C++ se usan not_logic, and_logic y or_logic.
 
 | 'bool.h' | C++ |
 | :-----------: | :-----------: |
