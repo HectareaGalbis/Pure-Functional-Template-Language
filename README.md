@@ -231,13 +231,13 @@ C++ hace una distinción muy clara entre los parámetros 'non-type' y 'type', lo
 
 ## El fichero 'bool_nt.h'.
 
-Este fichero contiene un conjunto de funciones básicas (not, and, or) para el manejo de valores booleanos. Como ya existen las palabras reservadas not, and y or en C++ se usan not_logic, and_logic y or_logic.
+Este fichero contiene un conjunto de funciones básicas (not, and, or) para el manejo de valores booleanos. Como ya existen las palabras reservadas not, and y or en C++ se usan not_logic_nt, and_logic_nt y or_logic_nt.
 
 | 'bool.h' | C++ |
 | :-----------: | :-----------: |
-| `not_logic` | ! |
-| `and_logic` | && |
-| `or_logic` | \|\| |
+| `not_logic_nt` | ! |
+| `and_logic_nt` | && |
+| `or_logic_nt` | \|\| |
 
 > A primera vista pueden parecer funciones prescindibles, pues ya tenemos símbolos que nos da C++ para estas operaciones. Sin embargo éstas serán útiles cuando veamos la clase List.
 
@@ -248,7 +248,7 @@ static const bool var2 = false;
 
 int main(){
 
-    if constexpr (and_logic::let<var1>::let<var2>){                 // <-- Ejemplo muy tonto, ya que podemos usar 'var1 && var2'.
+    if constexpr (and_logic_nt::let<var1>::let<var2>){                 // <-- Ejemplo muy tonto, ya que podemos usar 'var1 && var2'.
         std::cout << "Las dos variables valen true." << std::endl;
     }
     else {
@@ -268,9 +268,9 @@ Alguna variable vale false.
 
 > La expresión 'if constexpr' comprueba valores booleanos en tiempo de compilación, por lo que funciona muy bien con las metafunciones. En este caso, la función main anterior se deduce directamente a: int main() { std::cout << "Alguna variable vale false." << std::endl; return 0;}
 
-## La librería 'numeric.h'.
+## La librería 'integral_nt.h'.
 
-La librería 'numeric' ofrece las operaciones básicas de cálculo numérico con tipos de dato integral (int,char,...). Al igual que con los booleanos estas funciones son reproducibles con símbolos que nos ofrece C++, pero serán utiles para las listas. Las operaciones básicas más importantes que ofrece esta librería son:
+El fichero 'integral_nt.h' ofrece las operaciones básicas de cálculo numérico con tipos de dato integral (int,char,...). Al igual que con los booleanos estas funciones son reproducibles con símbolos que nos ofrece C++, pero serán utiles para la clase Vector. Las operaciones básicas más importantes que ofrece esta librería son:
 
 | 'numeric.h' | C++ |
 | :-----------: | :-----------: |
