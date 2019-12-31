@@ -19,6 +19,7 @@ Los [templates](https://en.wikipedia.org/wiki/Template_(C%2B%2B)) son una herram
 
 ## ¿Qué busco ahora?
 
+* Usar concepts(C++20) para las clases.
 * Una forma de unir el cálculo en compilación con el cálculo en ejecución (método exe).
 * Una metodología para maximizar el cálculo en compilación y calcular lo justo y necesario en ejecución.
 * Mejorar la idea de tener 3 tipos principales de clases (clases puras, clases semipuras (puras con exe), clases impuras (una clase normal de C++))
