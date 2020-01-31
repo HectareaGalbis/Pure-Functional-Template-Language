@@ -3,6 +3,8 @@
 
 namespace pftl{
 
+//********************************************************************************
+//--------------------------------------------------------------------------------
 
 template<class Ret>
 struct IO_t{
@@ -11,6 +13,48 @@ struct IO_t{
 
 };
 
+//--------------------------------------------------------------------------------
+
+template<auto x>
+struct Return : IO_t<decltype(x)>{
+    static constexpr decltype(x) exe(){
+        return x;
+    }
+};
+
+template<class Ret, Ret (*x)()>
+struct Return<x> : IO_t<Ret>{
+    static constexpr Ret exe(){
+        return x();
+    }
+};
+
+//--------------------------------------------------------------------------------
+
+template<auto f>
+struct Currying_f{};
+
+template<class Ret, class... Args, Ret (*f)(Args...)>
+struct Currying_f<f> : Currying<Currying_f<f>,IO_t<Ret>(IO_t<Args>...)>{
+    template<class... IOArgs>
+    struct value : IO_t<Ret>{
+        static constexpr Ret exe(){
+            return f(IOArgs::exe()...);
+        }
+    };
+};
+
+//--------------------------------------------------------------------------------
+//********************************************************************************
+
+}
+
+namespace std{
+
+    template<class T>
+    struct is_base_of<pftl::IO_t<pftl::Auto>,pftl::IO_t<T>>{
+        static constexpr bool value = true;
+    };
 
 }
 

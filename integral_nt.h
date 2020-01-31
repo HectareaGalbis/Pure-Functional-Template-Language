@@ -13,7 +13,7 @@ namespace pftl{
 template<class S>
 struct plus_g : public Currying<plus_g<S>,S(S,S)>{
     template<S m, S n>
-    static const S value = m+n;
+    static constexpr S value = m+n;
 };
 using plus_nt = plus_g<DEF_TYPE>;
 

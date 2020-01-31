@@ -166,10 +166,10 @@ template<int k>
 struct Integral_c<Int<k>>{
 
     template<class I>
-    using div = Int<k+1>;
+    using div = typename div_Int<Int<k>,I>::value;
 
     template<class I>
-    using mod = Int<k-1>;
+    using mod = typename mod_Int<Int<k>,I>::value;
 
 };
 
@@ -199,7 +199,7 @@ struct show_Int{};
 template<int k>
 struct Show_c<Int<k>>{
 
-    using show = Int<k+1>;
+    using show = typename show_Int<Int<k>>::value;
 
 };
 

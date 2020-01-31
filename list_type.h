@@ -4,6 +4,7 @@
 #include "curry.h"
 #include "show_type.h"
 #include "eq_type.h"
+#include "functor_type.h"
 
 namespace pftl{
 
@@ -127,10 +128,10 @@ struct filter : public Currying<filter,List_t<Type>(Type,List_t<Type>)>{
 //--------------------------------------------------------------------------------
 
 template<class L, class M>
-struct List_concat{};
+struct concat_List{};
 
 template<class L, class f>
-struct List_filter{};
+struct filter_List{};
 
 template<class L>
 struct last_List{};
@@ -174,7 +175,7 @@ struct List<>{
     using cons = List<XN>;
 
     template<class L>
-    using concat = typename List_concat<List<>,L>::value;
+    using concat = typename concat_List<List<>,L>::value;
 
     template<class f>
     using map = List<>;
@@ -213,7 +214,7 @@ struct List<X,XS...>{
     using cons = List<XN,X,XS...>;
 
     template<class L>
-    using concat = typename List_concat<List<X,XS...>,L>::value;
+    using concat = typename concat_List<List<X,XS...>,L>::value;
 
     template<class f>
     using map = typename List<typename f::template let<X>>::template concat<typename List<XS...>::template map<f>>;
@@ -221,7 +222,7 @@ struct List<X,XS...>{
     using reverse = typename List<XS...>::reverse::template concat<List<X>>;
 
     template<class f>
-    using filter = typename List_filter<List<X,XS...>,f>::value;
+    using filter = typename filter_List<List<X,XS...>,f>::value;
 
 };
 
@@ -278,26 +279,26 @@ struct init_List<List<X,XS...>>{
 };
 
 template<class... XLS, class... XMS>
-struct List_concat<List<XLS...>,List<XMS...>>{
+struct concat_List<List<XLS...>,List<XMS...>>{
     using value = List<XLS...,XMS...>;
 };
 
 template<class isFiltered, class L, class f>
-struct List_filterAux{};
+struct filter_ListAux{};
 
 template<class X, class... XS, class f>
-struct List_filterAux<Bool<false>,List<X,XS...>,f>{
+struct filter_ListAux<Bool<false>,List<X,XS...>,f>{
     using value = typename List<XS...>::template filter<f>;
 };
 
 template<class X, class... XS, class f>
-struct List_filterAux<Bool<true>,List<X,XS...>,f>{
+struct filter_ListAux<Bool<true>,List<X,XS...>,f>{
     using value = typename List<X>::template concat<typename List<XS...>::template filter<f>>;
 };
 
 template<class f, class X, class... XS>
-struct List_filter<List<X,XS...>,f>{
-    using value = typename List_filterAux<typename f::template let<X>,List<X,XS...>,f>::value;
+struct filter_List<List<X,XS...>,f>{
+    using value = typename filter_ListAux<typename f::template let<X>,List<X,XS...>,f>::value;
 };
 
 template<class L>
@@ -326,9 +327,60 @@ struct Show_c<List<>>{
     using show = List<Char<'"'>,Char<'"'>>;
 };
 
+template<char... cs>
+struct show_listAuxV{
+    using value = List<Char<'"'>,Char<cs>...,Char<'"'>>;
+};
+
+template<class X, class... XS>
+struct show_listAuxF2{
+    using value = typename concat::let<show::let<X>>::template let<cons::let<Char<','>>::let<typename show_listAuxF2<XS...>::value>>;
+};
+
+template<class X>
+struct show_listAuxF2<X>{
+    using value = show::let<X>;
+};
+
+template<class L>
+struct show_listAuxF{};
+
+template<class X, class... XS>
+struct show_listAuxF<List<X,XS...>>{
+    using value = typename concat::let<cons::let<Char<'['>>::let<typename show_listAuxF2<X,XS...>::value>>::template let<List<Char<']'>>>;
+};
+
+template<bool lc, class L>
+struct show_listAux{
+    using value = typename show_listAuxF<L>::value;
+};
+
+template<char... cs>
+struct show_listAux<true,List<Char<cs>...>>{
+    using value = typename show_listAuxV<cs...>::value;
+};
+
+template<class X, class... XS>
+struct Show_c<List<X,XS...>>{
+    using show = typename show_listAux<std::is_base_of<List_t<Char_t>,List<X,XS...>>::value,List<X,XS...>>::value;
+};
+
+//--------------------------------------------------------------------------------
+//********************************************************************************
+
+//********************************************************************************
+//--------------------------------------------------------------------------------
+
+template<>
+struct Functor_c<List<>>{
+    template<class f>
+    using fmap = List<>;
+};
+
 template<class... XS>
-struct Show_c<List<XS...>>{
-    using show = List<Char<'"'>,XS...,Char<'"'>>;
+struct Functor_c<List<XS...>>{
+    template<class f>
+    using fmap = List<typename f::template let<XS>...>;
 };
 
 //--------------------------------------------------------------------------------
@@ -362,19 +414,28 @@ constexpr char fromString<List<Char<cs>...>>[] = {cs...,'\0'};
 //--------------------------------------------------------------------------------
 //********************************************************************************
 
+//********************************************************************************
+//--------------------------------------------------------------------------------
+
+template<class L, class f, class r>
+using ListC = typename comp<map::let<r>,filter::let<f>>::template let<L>;
+
+//--------------------------------------------------------------------------------
+//********************************************************************************
+
 }
 
 namespace std{
 
-    template<class S>
-    struct is_base_of<pftl::List_t<S>,pftl::List<>>{
-        static const bool value = true;
-    };
+template<class S>
+struct is_base_of<pftl::List_t<S>,pftl::List<>>{
+    static constexpr bool value = true;
+};
 
-    template<class S, class X, class... XS>
-    struct is_base_of<pftl::List_t<S>,pftl::List<X,XS...>>{
-        static const bool value = is_base_of<S,X>::value && is_base_of<pftl::List_t<S>,pftl::List<XS...>>::value;
-    };
+template<class S, class X, class... XS>
+struct is_base_of<pftl::List_t<S>,pftl::List<X,XS...>>{
+    static constexpr bool value = is_base_of<S,X>::value && is_base_of<pftl::List_t<S>,pftl::List<XS...>>::value;
+};
 
 }
 
