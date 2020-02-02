@@ -22,13 +22,6 @@ struct Return : IO_t<decltype(x)>{
     }
 };
 
-template<class Ret, Ret (*x)()>
-struct Return<x> : IO_t<Ret>{
-    static constexpr Ret exe(){
-        return x();
-    }
-};
-
 //--------------------------------------------------------------------------------
 
 template<auto f>
@@ -42,6 +35,20 @@ struct Currying_f<f> : Currying<Currying_f<f>,IO_t<Ret>(IO_t<Args>...)>{
             return f(IOArgs::exe()...);
         }
     };
+};
+
+template<class Ret, Ret (*f)()>
+struct Currying_f<f> : IO_t<Ret>{
+    static constexpr Ret exe(){
+        return f();
+    }
+};
+
+template<void (*f)()>
+struct Currying_f<f> : IO_t<void>{
+    static constexpr void exe(){
+        f();
+    }
 };
 
 //--------------------------------------------------------------------------------
