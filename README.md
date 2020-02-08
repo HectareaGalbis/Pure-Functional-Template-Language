@@ -16,13 +16,12 @@ Los [templates](https://en.wikipedia.org/wiki/Template_(C%2B%2B)) son una herram
 * Tipo de dato Char para manejar caracteres.
 * Clases Show, Eq, Ord, Num, Integral, Enum...
 * Tipo de dato IO para el paso de cálculo en compilación a cálculo secuencial (incluida E/S).
+* Método para curryficar funciones que aprovechan al máximo el cálculo en tiempo de compilación.
 
 ## ¿Qué busco ahora?
 
+* Completar la documentación.
 * Usar concepts(C++20) para las clases.
-* Una forma de unir el cálculo en compilación con el cálculo en ejecución (método exe).
-* Una metodología para maximizar el cálculo en compilación y calcular lo justo y necesario en ejecución.
-* Mejorar la idea de tener 3 tipos principales de clases (clases puras, clases semipuras (puras con exe), clases impuras (una clase normal de C++))
 * Definición de parámetros de un programa (E/S), e hiperparámetros (parámetros precompilación, usados para generación de código).
 
 ## Instalación y requisitos
